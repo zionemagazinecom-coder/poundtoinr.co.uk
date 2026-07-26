@@ -153,3 +153,6 @@ create policy "Only owners can manage admin users"
 -- After running this migration, add your admin email once:
 -- insert into public.admin_users (email, role) values ('you@example.com', 'owner')
 -- on conflict (email) do update set role = excluded.role, is_active = true;
+insert into public.admin_users (email, role)
+values ('zionemagazine.com@gmail.com', 'owner')
+on conflict (email) do update set role = excluded.role, is_active = true;
