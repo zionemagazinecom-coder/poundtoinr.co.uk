@@ -1,6 +1,8 @@
 import { BarChart3, BriefcaseBusiness, GraduationCap, Plane, ShieldCheck, Wallet, WalletCards, type LucideIcon } from 'lucide-react';
 import { useMemo, useState, type PointerEvent } from 'react';
+import { AdminEditor } from './AdminEditor';
 import { Converter } from './components/Converter';
+import { SeoRoutePage, buildHomeSchema, homeSeo, seoPages, usePageSeo } from './SeoContent';
 
 const stats = [
   ['Live rate', '128.66'],
@@ -162,6 +164,24 @@ const chartRanges = {
 type ChartRange = keyof typeof chartRanges;
 
 export function App() {
+  const path = normalizePath(window.location.pathname);
+  if (path === '/admin') {
+    return <AdminEditor />;
+  }
+  if (seoPages[path]) {
+    return <SeoRoutePage page={seoPages[path]} />;
+  }
+  return <PublicApp path={path} />;
+}
+
+function PublicApp({ path }: { path: string }) {
+  usePageSeo({
+    description: homeSeo.description,
+    path: path === '/gbp-to-inr' ? '/gbp-to-inr' : '/',
+    schema: buildHomeSchema(),
+    title: homeSeo.title,
+  });
+
   const [selectedRange, setSelectedRange] = useState<ChartRange>('3M');
   const [hoverIndex, setHoverIndex] = useState(8);
   const activeChart = useMemo(() => chartRanges[selectedRange], [selectedRange]);
@@ -441,4 +461,12 @@ function tooltipPosition(x: number) {
     return { rectX: x - 166, textX: x - 150 };
   }
   return { rectX: x + 24, textX: x + 40 };
+}
+
+function normalizePath(pathname: string) {
+  const path = pathname.replace(/\/+$/, '') || '/';
+  if (path === '/converter') {
+    return '/gbp-to-inr';
+  }
+  return path;
 }
