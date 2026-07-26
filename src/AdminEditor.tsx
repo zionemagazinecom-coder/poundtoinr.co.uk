@@ -128,6 +128,38 @@ const starterPosts = [
     slug: 'gbp-to-inr-live-rate-source-policy',
     title: 'GBP to INR live rate source and data policy',
   },
+  {
+    blocks: [
+      createBlockFromHtml('h2', 'How the history chart fills'),
+      createBlockFromHtml('paragraph', 'The chart is built from real snapshots saved in Supabase. A missing day is left missing instead of being filled with an invented rate.'),
+      createBlockFromHtml('paragraph', 'This makes the chart slower to grow at the start, but it keeps the public page honest and easier to audit later.'),
+    ],
+    categories: ['Market notes', 'Exchange rates'],
+    excerpt: 'Why the history chart only grows from real saved GBP to INR snapshots.',
+    external_links: ['https://www.exchangerate-api.com/docs/standard-requests'],
+    focus_keyword: 'GBP to INR history chart',
+    internal_links: ['/gbp-to-inr', '/news'],
+    meta_description: 'The GBP to INR history chart uses real saved Supabase snapshots instead of invented backfilled rates.',
+    seo_title: 'How the GBP to INR History Chart Fills',
+    slug: 'how-gbp-to-inr-history-chart-fills',
+    title: 'How the GBP to INR history chart fills with real snapshots',
+  },
+  {
+    blocks: [
+      createBlockFromHtml('h2', 'Reference rate, not a provider quote'),
+      createBlockFromHtml('paragraph', 'The GBP to INR number on this site is a reference rate from the exchange-rate feed. A bank or transfer provider can quote a different rate because of margin, fees, speed or payment method.'),
+      createBlockFromHtml('paragraph', 'For a real transfer decision, compare the final INR amount received after every fee and margin is included.'),
+    ],
+    categories: ['Market notes', 'Money transfer'],
+    excerpt: 'Why the live GBP to INR reference rate can differ from a bank or transfer provider quote.',
+    external_links: ['https://www.fca.org.uk'],
+    focus_keyword: 'GBP to INR reference rate',
+    internal_links: ['/gbp-to-inr', '/news'],
+    meta_description: 'Understand why a GBP to INR reference rate is not the same as a guaranteed bank or transfer provider quote.',
+    seo_title: 'GBP to INR Reference Rate vs Provider Quote',
+    slug: 'gbp-to-inr-reference-rate-vs-provider-quote',
+    title: 'GBP to INR reference rate vs provider quote',
+  },
 ];
 
 const allowedTags = new Set([
@@ -412,8 +444,41 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
       };
     });
     const { error } = await supabase.from('posts').upsert(payload, { onConflict: 'slug' });
+    const snapshotError = error ? null : await captureCurrentSnapshot();
     setIsSaving(false);
-    setSavedMessage(error ? `Starter content failed: ${error.message}` : 'Real starter posts published');
+    setSavedMessage(
+      error
+        ? `Starter content failed: ${error.message}`
+        : snapshotError
+          ? `Posts published; snapshot failed: ${snapshotError}`
+          : 'Real starter posts and snapshot published',
+    );
+  };
+
+  const captureCurrentSnapshot = async () => {
+    if (!supabase) return 'Supabase is not configured';
+    try {
+      const response = await fetch('/api/rates/current?base=GBP&quote=INR', {
+        headers: { accept: 'application/json' },
+      });
+      const rate = await response.json();
+      if (!response.ok || typeof rate.rate !== 'number') {
+        return 'Live rate unavailable';
+      }
+
+      const { error } = await supabase.from('exchange_rate_snapshots').insert({
+        base_currency: rate.base,
+        data_status: rate.status === 'live' || rate.status === 'cached' ? rate.status : 'delayed',
+        fetched_at: rate.fetchedAt ?? new Date().toISOString(),
+        provider_name: rate.providerName ?? 'ExchangeRate-API',
+        provider_timestamp: rate.providerTimestamp ? new Date(rate.providerTimestamp).toISOString() : null,
+        quote_currency: rate.quote,
+        rate: rate.rate,
+      });
+      return error?.message ?? '';
+    } catch {
+      return 'Snapshot request failed';
+    }
   };
 
   return (

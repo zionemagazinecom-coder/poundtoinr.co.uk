@@ -341,7 +341,7 @@ function isGuidePost(post: PublishedPost) {
 
 function isMarketPost(post: PublishedPost) {
   const tags = post.categories.map((category) => category.toLowerCase());
-  return tags.some((tag) => tag.includes('news') || tag.includes('market') || tag.includes('rate'));
+  return tags.some((tag) => tag.includes('news') || tag.includes('market notes'));
 }
 
 function buildHistoryMetrics(points: RateSnapshot[]) {

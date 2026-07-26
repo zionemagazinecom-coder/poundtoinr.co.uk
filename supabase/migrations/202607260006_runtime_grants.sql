@@ -1,0 +1,17 @@
+grant usage on schema public to anon, authenticated;
+
+grant select on public.currencies to anon, authenticated;
+grant select on public.exchange_rate_snapshots to anon, authenticated;
+grant insert on public.exchange_rate_snapshots to authenticated;
+
+grant select on public.posts to anon, authenticated;
+grant insert, update on public.posts to authenticated;
+
+grant select on public.admin_users to authenticated;
+grant select, update on public.profiles to authenticated;
+
+drop policy if exists "Admins can insert rate snapshots" on public.exchange_rate_snapshots;
+create policy "Admins can insert rate snapshots"
+  on public.exchange_rate_snapshots for insert
+  to authenticated
+  with check (public.is_admin());
