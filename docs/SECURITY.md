@@ -14,7 +14,8 @@
 ## Admin CMS security
 
 - `/admin` is hidden from public navigation and marked `noindex,nofollow`.
-- The editor is gated by Supabase Auth and an `admin_users` allowlist.
+- The editor is gated by Supabase Auth, `/auth`, `profiles.role = 'admin'` and an `admin_users` compatibility allowlist.
+- Article image uploads use the Supabase Storage `media` bucket with admin-only write policies.
 - Run the latest migration in `supabase/migrations` before using the admin editor.
 - Add the first admin email in Supabase SQL editor:
 

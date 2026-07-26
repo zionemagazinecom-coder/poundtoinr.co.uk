@@ -20,6 +20,7 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type MouseEvent } from 'react';
+import { uploadMediaFile } from './lib/mediaUpload';
 import { supabase } from './lib/supabaseClient';
 
 type BlockType = 'paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'list' | 'image' | 'html';
@@ -625,16 +626,17 @@ function renderBlock(
 }
 
 function ImageBlock({ block, updateBlock }: { block: Block; updateBlock: (id: string, updates: Partial<Block>) => void }) {
-  const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
+  const [uploadMessage, setUploadMessage] = useState('');
+
+  const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      updateBlock(block.id, { alt: block.alt || file.name.replace(/\.[^.]+$/, ''), url: String(reader.result) });
-    };
-    reader.readAsDataURL(file);
+    setUploadMessage('Image upload ho rahi hai...');
+    const result = await uploadMediaFile(file);
+    updateBlock(block.id, { alt: block.alt || file.name.replace(/\.[^.]+$/, ''), url: result.url });
+    setUploadMessage(result.message);
   };
 
   return (
@@ -660,6 +662,7 @@ function ImageBlock({ block, updateBlock }: { block: Block; updateBlock: (id: st
           Upload/select from computer
           <input type="file" accept="image/*" onChange={handleFile} />
         </label>
+        {uploadMessage ? <small className="admin-upload-note">{uploadMessage}</small> : null}
       </div>
       <div className="admin-image-preview">
         {block.url ? <img src={block.url} alt={block.alt ?? ''} /> : <span>No image selected yet</span>}

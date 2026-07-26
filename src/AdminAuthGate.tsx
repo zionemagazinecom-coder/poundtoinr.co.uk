@@ -11,6 +11,24 @@ type AuthState =
   | { admin: AdminUserRow; kind: 'allowed'; session: AdminSession };
 
 export function AdminAuthGate({ children }: { children: (props: { admin: AdminUserRow; session: AdminSession; signOut: () => Promise<void> }) => ReactNode }) {
+  return (
+    <AdminAuthController mode="gate">
+      {children}
+    </AdminAuthController>
+  );
+}
+
+export function AdminAuthPage() {
+  return <AdminAuthController mode="login" />;
+}
+
+function AdminAuthController({
+  children,
+  mode,
+}: {
+  children?: (props: { admin: AdminUserRow; session: AdminSession; signOut: () => Promise<void> }) => ReactNode;
+  mode: 'gate' | 'login';
+}) {
   const [authState, setAuthState] = useState<AuthState>({ kind: 'loading' });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -70,6 +88,15 @@ export function AdminAuthGate({ children }: { children: (props: { admin: AdminUs
     };
   }, []);
 
+  useEffect(() => {
+    if (mode === 'gate' && authState.kind === 'signed-out') {
+      window.location.replace('/auth');
+    }
+    if (mode === 'login' && authState.kind === 'allowed') {
+      window.location.replace('/admin');
+    }
+  }, [authState.kind, mode]);
+
   const checkAdminSession = async (adminSession: AdminSession) => {
     if (!supabase) {
       setAuthState({ kind: 'setup-missing' });
@@ -78,6 +105,28 @@ export function AdminAuthGate({ children }: { children: (props: { admin: AdminUs
 
     setAuthState({ kind: 'checking', session: adminSession });
     const userEmail = adminSession.user.email ?? '';
+    const { data: profileData, error: profileError } = await supabase
+      .from('profiles')
+      .select('id,email,role,is_active')
+      .eq('id', adminSession.user.id)
+      .eq('is_active', true)
+      .eq('role', 'admin')
+      .maybeSingle<{ email: string | null; id: string; is_active: boolean; role: 'admin' | 'editor' }>();
+
+    if (!profileError && profileData) {
+      setAuthState({
+        admin: {
+          email: profileData.email ?? userEmail,
+          id: profileData.id,
+          is_active: profileData.is_active,
+          role: 'owner',
+        },
+        kind: 'allowed',
+        session: adminSession,
+      });
+      return;
+    }
+
     const { data, error } = await supabase
       .from('admin_users')
       .select('id,email,role,is_active')
@@ -132,7 +181,7 @@ export function AdminAuthGate({ children }: { children: (props: { admin: AdminUs
     setAuthState({ kind: 'signed-out' });
   };
 
-  if (authState.kind === 'allowed') {
+  if (authState.kind === 'allowed' && mode === 'gate' && children) {
     return <>{children({ admin: authState.admin, session: authState.session, signOut })}</>;
   }
 
@@ -151,6 +200,7 @@ export function AdminAuthGate({ children }: { children: (props: { admin: AdminUs
           </div>
         ) : null}
         {authState.kind === 'checking' || authState.kind === 'loading' ? <p className="admin-auth-muted">Session verify ho raha hai...</p> : null}
+        {authState.kind === 'signed-out' && mode === 'gate' ? <p className="admin-auth-muted">Login page par redirect ho raha hai...</p> : null}
         {authState.kind === 'denied' ? (
           <div className="admin-auth-alert">
             <strong>Access denied</strong>

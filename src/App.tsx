@@ -1,6 +1,6 @@
 import { BarChart3, BriefcaseBusiness, GraduationCap, Plane, ShieldCheck, Wallet, WalletCards, type LucideIcon } from 'lucide-react';
 import { useMemo, useState, type PointerEvent } from 'react';
-import { AdminAuthGate } from './AdminAuthGate';
+import { AdminAuthGate, AdminAuthPage } from './AdminAuthGate';
 import { AdminEditor } from './AdminEditor';
 import { Converter } from './components/Converter';
 import { SeoRoutePage, buildHomeSchema, homeSeo, seoPages, usePageSeo } from './SeoContent';
@@ -172,6 +172,9 @@ export function App() {
         {({ admin, signOut }) => <AdminEditor adminEmail={admin.email} adminRole={admin.role} onSignOut={signOut} />}
       </AdminAuthGate>
     );
+  }
+  if (path === '/auth') {
+    return <AdminAuthPage />;
   }
   if (seoPages[path]) {
     return <SeoRoutePage page={seoPages[path]} />;

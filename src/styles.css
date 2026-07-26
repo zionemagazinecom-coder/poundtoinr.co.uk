@@ -1977,6 +1977,13 @@ h4.admin-block-content,
   padding: 4px 0 0;
 }
 
+.admin-upload-note {
+  color: #0f766e;
+  display: block;
+  font-weight: 800;
+  margin: -4px 16px 12px;
+}
+
 .admin-image-preview,
 .admin-html-preview {
   background: #f8fafc;
