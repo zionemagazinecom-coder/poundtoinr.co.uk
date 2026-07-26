@@ -193,8 +193,8 @@ function PublicApp({ path }: { path: string }) {
               </svg>
             ) : (
               <div className="history-empty">
-                <strong>No real history stored yet</strong>
-                <p>Live GBP/INR is working from the API, but historical chart points will appear only after real snapshots are saved in Supabase.</p>
+                <strong>{snapshots.length ? `${snapshots.length} real snapshot stored` : 'No real history stored yet'}</strong>
+                <p>{snapshots.length ? 'The chart line will appear after at least two real GBP/INR snapshots are saved.' : 'Live GBP/INR is working from the API, but historical chart points will appear only after real snapshots are saved in Supabase.'}</p>
               </div>
             )}
             <div className="chart-footer">
