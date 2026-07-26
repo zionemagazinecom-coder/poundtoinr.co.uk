@@ -56,6 +56,9 @@ export async function getPublishedPosts(limit = 12): Promise<PublishedPost[]> {
 }
 
 export async function getRealRateSnapshots(limit = 90): Promise<RateSnapshot[]> {
+  const serverSnapshots = await getRateSnapshotsViaServer();
+  if (serverSnapshots.length) return serverSnapshots;
+
   if (!supabase) return getRateSnapshotsViaRest(limit);
 
   const { data, error } = await supabase
@@ -71,6 +74,20 @@ export async function getRealRateSnapshots(limit = 90): Promise<RateSnapshot[]> 
 
   const snapshots = mapSnapshotRows(data as SnapshotRow[]);
   return snapshots.length ? snapshots : getRateSnapshotsViaRest(limit);
+}
+
+async function getRateSnapshotsViaServer(): Promise<RateSnapshot[]> {
+  try {
+    const response = await fetch('/api/rates/history', {
+      headers: { accept: 'application/json' },
+    });
+    if (!response.ok) return [];
+
+    const payload = await response.json() as { snapshots?: SnapshotRow[] };
+    return mapSnapshotRows(payload.snapshots ?? []);
+  } catch {
+    return [];
+  }
 }
 
 async function getRateSnapshotsViaRest(limit: number): Promise<RateSnapshot[]> {
