@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 const siteUrl = 'https://poundtoinr.co.uk';
 const siteName = 'PoundToINR.co.uk';
+const contactEmail = 'zionemagazine.com@gmail.com';
 
 export type SeoPage = {
   blocks: Array<{ heading: string; paragraphs: string[] }>;
@@ -23,6 +24,13 @@ export const seoPages: Record<string, SeoPage> = {
         paragraphs: [
           'PoundToINR.co.uk is an independent information site for people checking the British pound to Indian rupee exchange rate. The site is built around a simple idea: users should see the mid-market reference rate first, then understand why the amount quoted by a bank or transfer provider may be different.',
           'We focus on currency education, transfer-cost explanations, historical GBP/INR context and practical notes for people moving money between the United Kingdom and India.',
+        ],
+      },
+      {
+        heading: 'Site ownership and contact',
+        paragraphs: [
+          `The site is operated as an independent editorial project for PoundToINR.co.uk. The confirmed owner/contact email for site questions is ${contactEmail}.`,
+          'The site does not operate as a bank, broker, remittance service or transfer provider. We publish reference-rate data, CMS-published guides and educational notes only.',
         ],
       },
       {
@@ -53,8 +61,16 @@ export const seoPages: Record<string, SeoPage> = {
       {
         heading: 'How to contact us',
         paragraphs: [
-          'For editorial questions, corrections, partnership queries or feedback about a GBP to INR page, contact the PoundToINR.co.uk team by email at contact@poundtoinr.co.uk.',
+          `For editorial questions, corrections, partnership queries or feedback about a GBP to INR page, contact the PoundToINR.co.uk team by email at ${contactEmail}.`,
           'Please do not send bank details, transfer receipts, passport information, one-time passwords or other sensitive personal documents. We cannot access or resolve transfers made through third-party providers.',
+        ],
+      },
+      {
+        heading: 'Real site details',
+        paragraphs: [
+          `Website: ${siteName}`,
+          `Primary contact email: ${contactEmail}`,
+          'Public service area: United Kingdom and India currency readers.',
         ],
       },
       {
@@ -486,6 +502,7 @@ function buildWebsiteSchema() {
     name: siteName,
     publisher: {
       '@type': 'Organization',
+      email: contactEmail,
       name: siteName,
       url: siteUrl,
     },
@@ -507,6 +524,7 @@ function buildPageSchema(page: SeoPage) {
     name: page.title,
     publisher: {
       '@type': 'Organization',
+      email: contactEmail,
       name: siteName,
       url: siteUrl,
     },

@@ -1,0 +1,17 @@
+name: Daily rate snapshot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '10 6 * * *'
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Capture GBP to INR snapshot
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error 'https://poundtoinr.co.uk/api/rates/current?base=GBP&quote=INR')"
+          echo "$response"
+          echo "$response" | grep -q '"rate"'
