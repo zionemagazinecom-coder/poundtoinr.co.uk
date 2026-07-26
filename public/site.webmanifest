@@ -1,0 +1,17 @@
+{
+  "name": "PoundToINR.co.uk",
+  "short_name": "PoundToINR",
+  "description": "GBP to INR live rate, converter and money-transfer guides.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030914",
+  "theme_color": "#030914",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
