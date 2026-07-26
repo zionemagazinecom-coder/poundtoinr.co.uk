@@ -1,2 +1,1 @@
-# No authorized advertising sellers yet.
-# Add the Google AdSense publisher line after the real publisher ID is available.
+google.com, pub-2244014043219833, DIRECT, f08c47fec0942fa0
