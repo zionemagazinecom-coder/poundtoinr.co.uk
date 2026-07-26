@@ -1,15 +1,11 @@
 import { BarChart3, BriefcaseBusiness, GraduationCap, Plane, ShieldCheck, Wallet, WalletCards, type LucideIcon } from 'lucide-react';
-import { useMemo, useState, type PointerEvent } from 'react';
+import { useEffect, useMemo, useState, type PointerEvent } from 'react';
 import { AdminAuthGate, AdminAuthPage } from './AdminAuthGate';
 import { AdminEditor } from './AdminEditor';
 import { Converter } from './components/Converter';
 import { SeoRoutePage, buildHomeSchema, homeSeo, seoPages, usePageSeo } from './SeoContent';
-
-const stats = [
-  ['Live rate', '128.66'],
-  ['Years of history', '5'],
-  ['Cost to use', 'Free'],
-];
+import { exchangeRateProvider, type NormalisedRate } from './lib/exchangeRateProvider';
+import { getPublishedPosts, getRealRateSnapshots, type PublishedPost, type RateSnapshot } from './lib/liveContent';
 
 const trustCards: Array<[string, string, LucideIcon]> = [
   ['Independent data', 'Every figure on this page is pulled from reference-rate architecture, so you are never reading a stale number without a label.', ShieldCheck],
@@ -25,18 +21,6 @@ const audience: Array<[string, LucideIcon]> = [
   ['Businesses invoicing in INR', BriefcaseBusiness],
 ];
 
-const notes = [
-  ['This week', 'Sterling holds its range as UK inflation cools', 'Softer services inflation trimmed rate-cut expectations only slightly, leaving GBP/INR inside the band it has traded for most of the quarter.'],
-  ['This month', 'RBI intervention keeps rupee volatility unusually low', 'Reserve Bank dollar sales around key levels have smoothed intraday swings, which shows up as flat stretches on the chart above.'],
-  ['Ongoing', 'Remittance corridors get cheaper as digital providers scale', 'Average UK-India transfer costs continue to drift below the global average, though bank wire pricing has barely moved.'],
-];
-
-const guideCards = [
-  ['Transfers', 'What a 3% margin really costs on a GBP2,000 transfer', 'Fee tables hide the real price. Here is how to work out the true cost of a transfer in under a minute, using nothing but the mid-market rate.'],
-  ['NRI banking', 'NRE vs NRO accounts: which one should receive your pounds?', 'One is freely repatriable and tax-free on interest, the other is not. Choosing wrongly is expensive and annoying to unwind.'],
-  ['Markets', 'Why the rupee moves when oil moves', 'India imports most of its crude. When Brent climbs, the import bill climbs with it, and the rupee usually softens against the pound.'],
-];
-
 const faqs = [
   ['What is the GBP to INR exchange rate today?', 'The figure at the top of this page is an indicative mid-market reference rate. Your bank or transfer provider may quote a different rate.'],
   ['Why is the rate my bank offers lower than the one shown here?', 'Banks and transfer companies usually add a margin to the mid-market rate, and some also add a flat fee on top.'],
@@ -44,125 +28,7 @@ const faqs = [
   ['How much money can I send from the UK to India?', 'Limits depend on your provider, payment method, identity checks and receiving account. Always confirm with your chosen provider.'],
 ];
 
-const chartRanges = {
-  '1M': {
-    change: '+3.57%',
-    high: 'Rs130.18',
-    low: 'Rs124.22',
-    markerDate: '2026-07-16',
-    markerRate: 'Rs130.180',
-    labels: [['80', '26 Jun'], ['250', '30 Jun'], ['390', '2 Jul'], ['540', '8 Jul'], ['690', '10 Jul'], ['830', '16 Jul'], ['970', '20 Jul'], ['1080', '24 Jul']],
-    points: [
-      { x: 58, y: 245, date: '2026-06-24', rate: 'Rs124.940' },
-      { x: 164, y: 214, date: '2026-06-30', rate: 'Rs126.020' },
-      { x: 284, y: 176, date: '2026-07-02', rate: 'Rs127.540' },
-      { x: 530, y: 154, date: '2026-07-08', rate: 'Rs128.410' },
-      { x: 718, y: 126, date: '2026-07-14', rate: 'Rs129.120' },
-      { x: 824, y: 78, date: '2026-07-16', rate: 'Rs130.180' },
-      { x: 942, y: 104, date: '2026-07-20', rate: 'Rs129.420' },
-      { x: 1068, y: 134, date: '2026-07-24', rate: 'Rs128.660' },
-    ],
-    area: 'M58 245 L112 220 L164 214 L222 210 L284 176 L354 164 L420 160 L475 164 L530 154 L590 148 L660 146 L718 126 L770 120 L824 78 L878 112 L942 104 L996 122 L1068 134 L1068 288 L58 288 Z',
-    line: 'M58 245 L112 220 L164 214 L222 210 L284 176 L354 164 L420 160 L475 164 L530 154 L590 148 L660 146 L718 126 L770 120 L824 78 L878 112 L942 104 L996 122 L1068 134',
-    markerX: 824,
-    markerY: 78,
-  },
-  '3M': {
-    change: '+1.17%',
-    high: 'Rs130.18',
-    low: 'Rs124.22',
-    markerDate: '2026-07-13',
-    markerRate: 'Rs128.020',
-    labels: [['70', '24 Apr'], ['158', '4 May'], ['258', '11 May'], ['386', '18 May'], ['500', '1 Jun'], ['620', '11 Jun'], ['742', '18 Jun'], ['820', '25 Jun'], ['914', '7 Jul'], ['1038', '17 Jul'], ['1080', '24 Jul']],
-    points: [
-      { x: 58, y: 174, date: '2026-04-24', rate: 'Rs127.420' },
-      { x: 146, y: 124, date: '2026-05-04', rate: 'Rs128.760' },
-      { x: 268, y: 73, date: '2026-05-11', rate: 'Rs130.020' },
-      { x: 407, y: 76, date: '2026-05-18', rate: 'Rs129.940' },
-      { x: 552, y: 96, date: '2026-06-01', rate: 'Rs129.120' },
-      { x: 688, y: 194, date: '2026-06-11', rate: 'Rs126.180' },
-      { x: 744, y: 252, date: '2026-06-19', rate: 'Rs124.830' },
-      { x: 820, y: 272, date: '2026-06-25', rate: 'Rs124.220' },
-      { x: 938, y: 170, date: '2026-07-09', rate: 'Rs127.780' },
-      { x: 1012, y: 119, date: '2026-07-13', rate: 'Rs128.020' },
-      { x: 1084, y: 72, date: '2026-07-24', rate: 'Rs128.660' },
-    ],
-    area: 'M58 174 L86 144 L112 158 L146 124 L204 108 L234 120 L268 73 L305 91 L338 84 L356 133 L407 76 L435 116 L466 100 L516 127 L552 96 L582 170 L618 176 L654 162 L688 194 L730 207 L744 252 L775 239 L820 272 L862 238 L902 224 L938 170 L980 151 L1012 119 L1036 60 L1062 88 L1084 72 L1084 288 L58 288 Z',
-    line: 'M58 174 L86 144 L112 158 L146 124 L204 108 L234 120 L268 73 L305 91 L338 84 L356 133 L407 76 L435 116 L466 100 L516 127 L552 96 L582 170 L618 176 L654 162 L688 194 L730 207 L744 252 L775 239 L820 272 L862 238 L902 224 L938 170 L980 151 L1012 119 L1036 60 L1062 88 L1084 72',
-    markerX: 938,
-    markerY: 170,
-  },
-  '6M': {
-    change: '+5.19%',
-    high: 'Rs130.18',
-    low: 'Rs122.31',
-    markerDate: '2026-05-13',
-    markerRate: 'Rs129.440',
-    labels: [['78', '29 Jan'], ['188', '11 Feb'], ['300', '24 Feb'], ['420', '9 Mar'], ['520', '2 Apr'], ['620', '16 Apr'], ['740', '13 May'], ['858', '26 May'], ['944', '19 Jun'], ['1080', '24 Jul']],
-    points: [
-      { x: 58, y: 258, date: '2026-01-24', rate: 'Rs122.310' },
-      { x: 96, y: 126, date: '2026-02-09', rate: 'Rs123.940' },
-      { x: 206, y: 246, date: '2026-02-18', rate: 'Rs124.560' },
-      { x: 354, y: 236, date: '2026-03-09', rate: 'Rs124.880' },
-      { x: 476, y: 140, date: '2026-03-28', rate: 'Rs126.700' },
-      { x: 572, y: 120, date: '2026-04-16', rate: 'Rs127.520' },
-      { x: 690, y: 82, date: '2026-05-13', rate: 'Rs129.440' },
-      { x: 806, y: 124, date: '2026-05-26', rate: 'Rs128.720' },
-      { x: 950, y: 235, date: '2026-06-19', rate: 'Rs124.900' },
-      { x: 1086, y: 112, date: '2026-07-24', rate: 'Rs128.660' },
-    ],
-    area: 'M58 258 L78 184 L96 126 L118 252 L152 226 L206 246 L272 238 L324 242 L354 236 L420 160 L476 140 L512 230 L572 120 L628 158 L690 82 L742 96 L806 124 L858 108 L922 172 L950 235 L984 216 L1018 142 L1064 76 L1086 112 L1086 288 L58 288 Z',
-    line: 'M58 258 L78 184 L96 126 L118 252 L152 226 L206 246 L272 238 L324 242 L354 236 L420 160 L476 140 L512 230 L572 120 L628 158 L690 82 L742 96 L806 124 L858 108 L922 172 L950 235 L984 216 L1018 142 L1064 76 L1086 112',
-    markerX: 690,
-    markerY: 82,
-  },
-  '1Y': {
-    change: '+7.84%',
-    high: 'Rs131.05',
-    low: 'Rs119.86',
-    markerDate: '2026-03-04',
-    markerRate: 'Rs126.420',
-    labels: [['58', 'Aug'], ['205', 'Oct'], ['350', 'Dec'], ['505', 'Mar'], ['650', 'Apr'], ['780', 'May'], ['910', 'Jun'], ['1086', 'Jul']],
-    points: [
-      { x: 58, y: 270, date: '2025-08-01', rate: 'Rs119.860' },
-      { x: 205, y: 232, date: '2025-10-09', rate: 'Rs122.780' },
-      { x: 350, y: 188, date: '2025-12-12', rate: 'Rs124.910' },
-      { x: 505, y: 168, date: '2026-03-04', rate: 'Rs126.420' },
-      { x: 650, y: 162, date: '2026-04-21', rate: 'Rs127.010' },
-      { x: 780, y: 78, date: '2026-05-19', rate: 'Rs131.050' },
-      { x: 910, y: 104, date: '2026-06-18', rate: 'Rs129.620' },
-      { x: 1086, y: 112, date: '2026-07-24', rate: 'Rs128.660' },
-    ],
-    area: 'M58 270 L130 246 L205 232 L276 220 L350 188 L420 208 L505 168 L584 132 L650 162 L718 118 L780 78 L842 126 L910 104 L980 80 L1086 112 L1086 288 L58 288 Z',
-    line: 'M58 270 L130 246 L205 232 L276 220 L350 188 L420 208 L505 168 L584 132 L650 162 L718 118 L780 78 L842 126 L910 104 L980 80 L1086 112',
-    markerX: 505,
-    markerY: 168,
-  },
-  '5Y': {
-    change: '+18.42%',
-    high: 'Rs131.05',
-    low: 'Rs94.12',
-    markerDate: '2024-11-21',
-    markerRate: 'Rs105.760',
-    labels: [['58', '2021'], ['220', '2022'], ['392', '2023'], ['562', '2024'], ['736', '2025'], ['908', '2026'], ['1086', 'Jul']],
-    points: [
-      { x: 58, y: 276, date: '2021-07-24', rate: 'Rs94.120' },
-      { x: 220, y: 248, date: '2022-07-24', rate: 'Rs98.650' },
-      { x: 392, y: 210, date: '2023-07-24', rate: 'Rs103.420' },
-      { x: 478, y: 190, date: '2024-11-21', rate: 'Rs105.760' },
-      { x: 650, y: 150, date: '2025-07-24', rate: 'Rs114.820' },
-      { x: 820, y: 142, date: '2026-02-24', rate: 'Rs119.300' },
-      { x: 994, y: 92, date: '2026-06-24', rate: 'Rs127.990' },
-      { x: 1086, y: 68, date: '2026-07-24', rate: 'Rs128.660' },
-    ],
-    area: 'M58 276 L140 258 L220 248 L306 230 L392 210 L478 190 L562 172 L650 150 L736 126 L820 142 L908 104 L994 92 L1086 68 L1086 288 L58 288 Z',
-    line: 'M58 276 L140 258 L220 248 L306 230 L392 210 L478 190 L562 172 L650 150 L736 126 L820 142 L908 104 L994 92 L1086 68',
-    markerX: 478,
-    markerY: 190,
-  },
-} as const;
-
-type ChartRange = keyof typeof chartRanges;
+const conversionAmounts = [1, 10, 50, 100, 500, 1000];
 
 export function App() {
   const path = normalizePath(window.location.pathname);
@@ -190,32 +56,47 @@ function PublicApp({ path }: { path: string }) {
     title: homeSeo.title,
   });
 
-  const [selectedRange, setSelectedRange] = useState<ChartRange>('3M');
-  const [hoverIndex, setHoverIndex] = useState(8);
-  const activeChart = useMemo(() => chartRanges[selectedRange], [selectedRange]);
-  const activePoint = activeChart.points[Math.min(hoverIndex, activeChart.points.length - 1)];
+  const [liveRate, setLiveRate] = useState<NormalisedRate | null>(null);
+  const [rateError, setRateError] = useState('');
+  const [posts, setPosts] = useState<PublishedPost[]>([]);
+  const [snapshots, setSnapshots] = useState<RateSnapshot[]>([]);
 
-  function selectRange(range: ChartRange) {
-    setSelectedRange(range);
-    setHoverIndex(Math.max(0, Math.floor(chartRanges[range].points.length * 0.75)));
-  }
+  useEffect(() => {
+    let active = true;
 
-  function updateChartHover(event: PointerEvent<SVGSVGElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 1100;
-    let closestIndex = 0;
-    let closestDistance = Number.POSITIVE_INFINITY;
+    exchangeRateProvider
+      .getCurrentRate('GBP', 'INR')
+      .then((rate) => {
+        if (active) setLiveRate(rate);
+      })
+      .catch(() => {
+        if (active) setRateError('Live GBP/INR rate is unavailable right now.');
+      });
 
-    activeChart.points.forEach((point, index) => {
-      const distance = Math.abs(point.x - x);
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestIndex = index;
-      }
+    getPublishedPosts().then((nextPosts) => {
+      if (active) setPosts(nextPosts);
     });
 
-    setHoverIndex(closestIndex);
-  }
+    getRealRateSnapshots().then((nextSnapshots) => {
+      if (active) setSnapshots(nextSnapshots);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const chartData = useMemo(() => buildSnapshotChart(snapshots), [snapshots]);
+  const historyMetrics = useMemo(() => buildHistoryMetrics(snapshots), [snapshots]);
+  const guidePosts = useMemo(() => posts.filter(isGuidePost).slice(0, 3), [posts]);
+  const marketPosts = useMemo(() => posts.filter(isMarketPost).slice(0, 3), [posts]);
+  const stats = useMemo(() => [
+    ['Live rate', liveRate ? formatRate(liveRate.rate) : rateError ? 'Unavailable' : 'Loading'],
+    ['History points', String(snapshots.length)],
+    ['Content source', posts.length ? 'Supabase' : 'CMS ready'],
+  ], [liveRate, posts.length, rateError, snapshots.length]);
+  const rateStamp = liveRate ? formatDateTime(liveRate.fetchedAt) : rateError || 'Loading live rate';
+  const heroRateText = liveRate ? `₹${formatRate(liveRate.rate)}` : rateError ? 'unavailable' : 'loading';
 
   function updateCardLight(event: PointerEvent<HTMLElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -248,14 +129,14 @@ function PublicApp({ path }: { path: string }) {
           <div className="hero-glow" />
           <div className="hero-grid">
             <div className="hero-copy">
-              <p className="rate-pill"><i /> Updated 2026-07-24 - mid-market reference rate</p>
+              <p className="rate-pill"><i /> Updated {rateStamp} - ExchangeRate-API reference rate</p>
               <h1>Convert British Pounds to <span>Indian Rupees</span> instantly</h1>
               <p className="hero-text">
-                One pound is worth <strong>{'\u20b9'}128.66</strong> on the mid-market today. See what your transfer is actually worth, how the rate has moved over five years, and where providers quietly take their cut.
+                One pound is worth <strong>{heroRateText}</strong> on the latest available mid-market feed. We only show live API data here; if history or articles are not in Supabase yet, fake placeholders stay hidden.
               </p>
               <div className="hero-actions">
                 <a className="primary-btn" href="#converter">Convert an amount <span>{' ->'}</span></a>
-                <a className="ghost-btn" href="#chart">View the 5-year chart</a>
+                <a className="ghost-btn" href="#chart">View real history</a>
               </div>
               <div className="stat-row">
                 {stats.map(([label, value]) => (
@@ -277,65 +158,48 @@ function PublicApp({ path }: { path: string }) {
             <div className="history-head">
               <div>
                 <h2 id="chart-title">GBP to INR history</h2>
-                <p>Daily closes from the European Central Bank reference series.</p>
+                <p>Only stored GBP/INR snapshots from Supabase are shown here.</p>
               </div>
-              <div className="range-tabs" aria-label="Chart range">
-                {(Object.keys(chartRanges) as ChartRange[]).map((range) => (
-                  <button
-                    className={selectedRange === range ? 'active' : ''}
-                    key={range}
-                    type="button"
-                    onClick={() => selectRange(range)}
-                  >
-                    {range}
-                  </button>
-                ))}
+              <div className="range-tabs" aria-label="Chart source">
+                <button className="active" type="button">Real data</button>
               </div>
             </div>
             <div className="history-metrics">
-              <div><span>Period change</span><strong>{activeChart.change}</strong></div>
-              <div><span>Period high</span><strong>{activeChart.high}</strong></div>
-              <div><span>Period low</span><strong>{activeChart.low}</strong></div>
+              <div><span>Stored points</span><strong>{snapshots.length}</strong></div>
+              <div><span>Period high</span><strong>{historyMetrics.high}</strong></div>
+              <div><span>Period low</span><strong>{historyMetrics.low}</strong></div>
             </div>
-            <svg
-              viewBox="0 0 1100 330"
-              role="img"
-              aria-label="GBP to INR reference rate line chart preview"
-              onPointerMove={updateChartHover}
-              onPointerLeave={() => setHoverIndex(activeChart.points.length - 2)}
-            >
-              <defs>
-                <linearGradient id="lineFill" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="#2ee6bd" stopOpacity="0.38" />
-                  <stop offset="100%" stopColor="#2ee6bd" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <g className="axis-labels">
-                <text x="18" y="70">130.78</text>
-                <text x="18" y="150">127.62</text>
-                <text x="18" y="230">123.62</text>
-              </g>
-              <path className="gridline" d="M70 70 H1080 M70 150 H1080 M70 230 H1080" />
-              <path className="chart-area" d={activeChart.area} />
-              <path className="chart-line" d={activeChart.line} />
-              <line className="hover-line" x1={activePoint.x} y1="32" x2={activePoint.x} y2="286" />
-              <circle cx={activePoint.x} cy={activePoint.y} r="6" />
-              <g className="tooltip">
-                <rect x={tooltipPosition(activePoint.x).rectX} y={Math.max(activePoint.y - 82, 28)} width="142" height="66" rx="12" />
-                <text x={tooltipPosition(activePoint.x).textX} y={Math.max(activePoint.y - 56, 54)}>{activePoint.date}</text>
-                <text x={tooltipPosition(activePoint.x).textX} y={Math.max(activePoint.y - 32, 78)}>1 GBP: {activePoint.rate}</text>
-              </g>
-              <g className="x-axis-labels">
-                {activeChart.labels.map(([x, label]) => (
-                  <text key={`${selectedRange}-${x}-${label}`} x={x} y="318">{label}</text>
-                ))}
-              </g>
-              <rect className="chart-hit-area" x="55" y="30" width="1035" height="292" />
-            </svg>
+            {chartData ? (
+              <svg viewBox="0 0 1100 330" role="img" aria-label="Real GBP to INR stored snapshot chart">
+                <defs>
+                  <linearGradient id="lineFill" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#2ee6bd" stopOpacity="0.38" />
+                    <stop offset="100%" stopColor="#2ee6bd" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <g className="axis-labels">
+                  {chartData.yLabels.map((label, index) => (
+                    <text key={label} x="18" y={70 + index * 80}>{label}</text>
+                  ))}
+                </g>
+                <path className="gridline" d="M70 70 H1080 M70 150 H1080 M70 230 H1080" />
+                <path className="chart-area" d={chartData.area} />
+                <path className="chart-line" d={chartData.line} />
+                <g className="x-axis-labels">
+                  {chartData.labels.map((label) => (
+                    <text key={`${label.x}-${label.text}`} x={label.x} y="318">{label.text}</text>
+                  ))}
+                </g>
+              </svg>
+            ) : (
+              <div className="history-empty">
+                <strong>No real history stored yet</strong>
+                <p>Live GBP/INR is working from the API, but historical chart points will appear only after real snapshots are saved in Supabase.</p>
+              </div>
+            )}
             <div className="chart-footer">
               <span>Reference rate, not a guaranteed provider quote</span>
-              <button type="button">Download CSV</button>
-              <button type="button">Print chart</button>
+              <span>Fake chart data disabled</span>
             </div>
           </div>
         </section>
@@ -367,10 +231,10 @@ function PublicApp({ path }: { path: string }) {
             <h2>Common GBP to INR amounts</h2>
           </div>
           <div className="conversion-grid">
-            {[1, 10, 50, 100, 500, 1000].map((amount) => (
+            {conversionAmounts.map((amount) => (
               <article key={amount} className="hover-card" onPointerMove={updateCardLight}>
                 <span>{'\u00a3'}{amount.toLocaleString('en-GB')}</span>
-                <strong>{'\u20b9'}{(amount * 128.66).toLocaleString('en-IN', { maximumFractionDigits: 2 })}</strong>
+                <strong>{liveRate ? `₹${(amount * liveRate.rate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}` : 'Live rate needed'}</strong>
               </article>
             ))}
           </div>
@@ -382,14 +246,14 @@ function PublicApp({ path }: { path: string }) {
             <h2>Understand the transfer before you make it</h2>
           </div>
           <div className="guide-grid">
-            {guideCards.map(([category, title, body]) => (
-              <article key={title} className="guide-card hover-card" onPointerMove={updateCardLight}>
-                <span>{category}</span>
-                <h3>{title}</h3>
-                <p>{body}</p>
+            {guidePosts.length ? guidePosts.map((post) => (
+              <article key={post.slug} className="guide-card hover-card" onPointerMove={updateCardLight}>
+                <span>{post.categories[0] ?? 'Guide'}</span>
+                <h3>{post.title}</h3>
+                <p>{post.excerpt || 'Published from the CMS.'}</p>
                 <a href="/guides">Read the guide <b>{'->'}</b></a>
               </article>
-            ))}
+            )) : <EmptyContentCard message="No published guide posts yet. Publish from /admin and they will appear here." />}
           </div>
         </section>
 
@@ -399,13 +263,13 @@ function PublicApp({ path }: { path: string }) {
             <a href="/news">All market notes {'->'}</a>
           </div>
           <div className="notes-grid">
-            {notes.map(([kicker, title, body]) => (
-              <article key={title} className="news-card hover-card" onPointerMove={updateCardLight}>
-                <span>{kicker}</span>
-                <h3>{title}</h3>
-                <p>{body}</p>
+            {marketPosts.length ? marketPosts.map((post) => (
+              <article key={post.slug} className="news-card hover-card" onPointerMove={updateCardLight}>
+                <span>{post.publishedAt ? formatDate(post.publishedAt) : 'Published'}</span>
+                <h3>{post.title}</h3>
+                <p>{post.excerpt || 'Published from the CMS.'}</p>
               </article>
-            ))}
+            )) : <EmptyContentCard message="No published market notes yet. Static market notes are disabled." />}
           </div>
         </section>
 
@@ -426,11 +290,7 @@ function PublicApp({ path }: { path: string }) {
 
         <section className="newsletter">
           <h2>Watch GBP/INR without refreshing the chart all day</h2>
-          <p>Get rate alerts and plain-English currency notes when email delivery is configured.</p>
-          <form>
-            <input placeholder="you@example.com" aria-label="Email address" />
-            <button type="button">Subscribe</button>
-          </form>
+          <p>Email alerts are not connected yet, so this site is not collecting addresses until a real email provider is added.</p>
         </section>
       </main>
 
@@ -464,11 +324,100 @@ function PublicApp({ path }: { path: string }) {
   );
 }
 
-function tooltipPosition(x: number) {
-  if (x > 910) {
-    return { rectX: x - 166, textX: x - 150 };
+function EmptyContentCard({ message }: { message: string }) {
+  return (
+    <article className="guide-card empty-content-card">
+      <span>CMS</span>
+      <h3>Waiting for real content</h3>
+      <p>{message}</p>
+    </article>
+  );
+}
+
+function isGuidePost(post: PublishedPost) {
+  const tags = post.categories.map((category) => category.toLowerCase());
+  return tags.some((tag) => tag.includes('guide') || tag.includes('transfer') || tag.includes('nri'));
+}
+
+function isMarketPost(post: PublishedPost) {
+  const tags = post.categories.map((category) => category.toLowerCase());
+  return tags.some((tag) => tag.includes('news') || tag.includes('market') || tag.includes('rate'));
+}
+
+function buildHistoryMetrics(points: RateSnapshot[]) {
+  if (!points.length) {
+    return { high: 'Not stored', low: 'Not stored' };
   }
-  return { rectX: x + 24, textX: x + 40 };
+
+  const rates = points.map((point) => point.rate);
+  return {
+    high: `₹${formatRate(Math.max(...rates))}`,
+    low: `₹${formatRate(Math.min(...rates))}`,
+  };
+}
+
+function buildSnapshotChart(points: RateSnapshot[]) {
+  if (points.length < 2) return null;
+
+  const width = 1010;
+  const left = 70;
+  const top = 45;
+  const height = 235;
+  const rates = points.map((point) => point.rate);
+  const min = Math.min(...rates);
+  const max = Math.max(...rates);
+  const range = max - min || 1;
+  const coords = points.map((point, index) => {
+    const x = left + (index / Math.max(points.length - 1, 1)) * width;
+    const y = top + ((max - point.rate) / range) * height;
+    return { x, y, point };
+  });
+
+  const line = coords.map((coord, index) => `${index === 0 ? 'M' : 'L'}${coord.x.toFixed(1)} ${coord.y.toFixed(1)}`).join(' ');
+  const area = `${line} L${coords[coords.length - 1].x.toFixed(1)} 288 L${coords[0].x.toFixed(1)} 288 Z`;
+  const labelIndexes = [0, Math.floor((points.length - 1) / 2), points.length - 1];
+
+  return {
+    area,
+    labels: labelIndexes.map((index) => ({
+      text: formatShortDate(coords[index].point.fetchedAt),
+      x: coords[index].x.toFixed(0),
+    })),
+    line,
+    yLabels: [max, min + range / 2, min].map((value) => formatRate(value)),
+  };
+}
+
+function formatRate(rate: number) {
+  return new Intl.NumberFormat('en-GB', {
+    maximumFractionDigits: 3,
+    minimumFractionDigits: 2,
+  }).format(rate);
+}
+
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(value));
+}
+
+function formatShortDate(value: string) {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+  }).format(new Date(value));
+}
+
+function formatDateTime(value: string) {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    month: 'short',
+    timeZoneName: 'short',
+  }).format(new Date(value));
 }
 
 function normalizePath(pathname: string) {

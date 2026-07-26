@@ -49,6 +49,9 @@ export function Converter() {
     }
   }, [amount, rate]);
 
+  const rateLabel = rate ? `Live mid-market rate - ${formatDateTime(rate.fetchedAt)}` : 'Live mid-market rate unavailable';
+  const statusLabel = rate ? rate.status : 'offline';
+
   function swapCurrencies() {
     setFrom(to);
     setTo(from);
@@ -57,8 +60,8 @@ export function Converter() {
   return (
     <section className="converter-card">
       <div className="converter-topline">
-        <span><i /> Live mid-market rate - 2026-07-24</span>
-        <strong>down -0.23% today</strong>
+        <span><i /> {rateLabel}</span>
+        <strong>{statusLabel}</strong>
       </div>
 
       <div className="converter-grid">
@@ -129,4 +132,14 @@ function compactNumber(value: number): string {
   return new Intl.NumberFormat('en-GB', {
     maximumFractionDigits: value >= 1000 ? 0 : 1,
   }).format(value);
+}
+
+function formatDateTime(value: string) {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    month: 'short',
+    timeZoneName: 'short',
+  }).format(new Date(value));
 }

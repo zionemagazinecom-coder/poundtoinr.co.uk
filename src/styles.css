@@ -678,6 +678,29 @@ select,
   width: 100%;
 }
 
+.history-empty {
+  align-items: center;
+  border: 1px dashed rgba(46, 230, 189, 0.32);
+  border-radius: 18px;
+  color: #9fb0c6;
+  display: grid;
+  min-height: 280px;
+  padding: 34px;
+  place-items: center;
+  text-align: center;
+}
+
+.history-empty strong {
+  color: #eff8ff;
+  display: block;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.history-empty p {
+  max-width: 560px;
+}
+
 .chart-area {
   fill: url(#lineFill);
 }
@@ -763,6 +786,12 @@ select,
 .chart-footer span {
   flex: 1;
   font-size: 13px;
+}
+
+.chart-footer span:last-child {
+  color: #2ee6bd;
+  font-weight: 800;
+  text-align: right;
 }
 
 .chart-footer button {

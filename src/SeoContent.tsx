@@ -243,7 +243,7 @@ export const seoPages: Record<string, SeoPage> = {
       {
         heading: 'What a 3% margin really costs on a GBP2,000 transfer',
         paragraphs: [
-          'A transfer provider can advertise a low fee while making money inside the exchange rate. If the mid-market rate is Rs128.66 and the provider gives a rate 3% lower, the effective rate is about Rs124.80. On GBP2,000, that difference is more than Rs7,700 before any flat fee is counted.',
+          'A transfer provider can advertise a low fee while making money inside the exchange rate. For example, if a provider gives a rate 3% below the current mid-market feed, that hidden margin can cost more than the visible flat fee. Always compare the final rupees received, not only the advertised fee.',
           'The clean way to compare providers is to ignore slogans and calculate the final rupees received. Use the mid-market rate as a reference, subtract all fees and compare the delivered amount for the same payment method and speed.',
         ],
       },
