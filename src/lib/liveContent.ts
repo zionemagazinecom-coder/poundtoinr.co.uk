@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import { publicSupabasePublishableKey, publicSupabaseUrl, supabase } from './supabaseClient';
 
 export type PublishedPost = {
   categories: string[];
@@ -56,7 +56,7 @@ export async function getPublishedPosts(limit = 12): Promise<PublishedPost[]> {
 }
 
 export async function getRealRateSnapshots(limit = 90): Promise<RateSnapshot[]> {
-  if (!supabase) return [];
+  if (!supabase) return getRateSnapshotsViaRest(limit);
 
   const { data, error } = await supabase
     .from('exchange_rate_snapshots')
@@ -67,9 +67,41 @@ export async function getRealRateSnapshots(limit = 90): Promise<RateSnapshot[]> 
     .order('fetched_at', { ascending: false })
     .limit(limit);
 
-  if (error || !data) return [];
+  if (error || !data) return getRateSnapshotsViaRest(limit);
 
-  return (data as SnapshotRow[])
+  const snapshots = mapSnapshotRows(data as SnapshotRow[]);
+  return snapshots.length ? snapshots : getRateSnapshotsViaRest(limit);
+}
+
+async function getRateSnapshotsViaRest(limit: number): Promise<RateSnapshot[]> {
+  if (!publicSupabaseUrl || !publicSupabasePublishableKey) return [];
+
+  const params = new URLSearchParams({
+    base_currency: 'eq.GBP',
+    data_status: 'in.(live,delayed,cached)',
+    limit: String(limit),
+    order: 'fetched_at.desc',
+    quote_currency: 'eq.INR',
+    select: 'rate,fetched_at,provider_timestamp',
+  });
+
+  try {
+    const response = await fetch(`${publicSupabaseUrl.replace(/\/+$/, '')}/rest/v1/exchange_rate_snapshots?${params}`, {
+      headers: {
+        apikey: publicSupabasePublishableKey,
+        authorization: `Bearer ${publicSupabasePublishableKey}`,
+      },
+    });
+
+    if (!response.ok) return [];
+    return mapSnapshotRows(await response.json() as SnapshotRow[]);
+  } catch {
+    return [];
+  }
+}
+
+function mapSnapshotRows(rows: SnapshotRow[]): RateSnapshot[] {
+  return rows
     .map((point) => ({
       fetchedAt: point.fetched_at,
       providerTimestamp: point.provider_timestamp,
