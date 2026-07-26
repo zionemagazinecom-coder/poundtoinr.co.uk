@@ -1302,6 +1302,139 @@ select,
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+.admin-auth-shell {
+  align-items: center;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(20, 184, 166, 0.18), transparent 28rem),
+    #07111f;
+  color: #f8fafc;
+  display: grid;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.admin-auth-card {
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+  margin: 0 auto;
+  max-width: 480px;
+  padding: 34px;
+  width: 100%;
+}
+
+.admin-auth-icon {
+  align-items: center;
+  background: #0f766e;
+  border-radius: 999px;
+  display: inline-flex;
+  height: 56px;
+  justify-content: center;
+  margin-bottom: 18px;
+  width: 56px;
+}
+
+.admin-auth-eyebrow {
+  color: #5eead4;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.admin-auth-card h1 {
+  font-size: 34px;
+  line-height: 1.1;
+  margin: 0 0 18px;
+}
+
+.admin-auth-form,
+.admin-auth-form label {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-auth-form {
+  gap: 14px;
+}
+
+.admin-auth-form label {
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.admin-auth-form input {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  color: #111827;
+  min-height: 42px;
+  padding: 10px 12px;
+}
+
+.admin-auth-form button,
+.admin-auth-alert button {
+  align-items: center;
+  background: #14b8a6;
+  border: 0;
+  border-radius: 7px;
+  color: #042f2e;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 900;
+  gap: 8px;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 14px;
+}
+
+.admin-auth-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.admin-auth-form .admin-auth-secondary {
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  color: #e2e8f0;
+}
+
+.admin-auth-alert,
+.admin-auth-success,
+.admin-auth-error,
+.admin-auth-muted {
+  border-radius: 8px;
+  line-height: 1.6;
+  margin: 14px 0;
+  padding: 12px 14px;
+}
+
+.admin-auth-alert {
+  background: rgba(127, 29, 29, 0.24);
+  border: 1px solid rgba(248, 113, 113, 0.38);
+}
+
+.admin-auth-success {
+  background: rgba(20, 83, 45, 0.32);
+  border: 1px solid rgba(74, 222, 128, 0.38);
+  color: #bbf7d0;
+}
+
+.admin-auth-error {
+  background: rgba(127, 29, 29, 0.24);
+  border: 1px solid rgba(248, 113, 113, 0.38);
+  color: #fecaca;
+}
+
+.admin-auth-muted {
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  color: #cbd5e1;
+}
+
 .admin-shell button,
 .admin-shell input,
 .admin-shell select,
@@ -1356,6 +1489,21 @@ select,
   background: #063b32;
   border-color: #14b8a6;
   color: #5eead4;
+}
+
+.admin-user-pill {
+  align-items: center;
+  background: #172033;
+  border: 1px solid #334155;
+  border-radius: 999px;
+  color: #dbeafe;
+  display: inline-flex;
+  gap: 6px;
+  max-width: 280px;
+  overflow: hidden;
+  padding: 7px 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .admin-toolbar button,

@@ -15,10 +15,12 @@ import {
   Plus,
   Save,
   Send,
+  ShieldCheck,
   Trash2,
   X,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type MouseEvent } from 'react';
+import { supabase } from './lib/supabaseClient';
 
 type BlockType = 'paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'list' | 'image' | 'html';
 type PostStatus = 'draft' | 'review' | 'published';
@@ -34,6 +36,12 @@ type Block = {
 };
 
 type LinkKind = 'internal' | 'external';
+
+type AdminEditorProps = {
+  adminEmail: string;
+  adminRole: 'owner' | 'editor';
+  onSignOut: () => Promise<void>;
+};
 
 const sampleImages = [
   {
@@ -99,9 +107,10 @@ const initialBlocks: Block[] = [
   },
 ];
 
-export function AdminEditor() {
+export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorProps) {
   const [title, setTitle] = useState('GBP to INR transfer guide');
   const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
+  const [currentPostId, setCurrentPostId] = useState<string | null>(null);
   const [activeInserter, setActiveInserter] = useState<number | null>(null);
   const [selectedBlockIds, setSelectedBlockIds] = useState<Set<string>>(new Set());
   const [savedMessage, setSavedMessage] = useState('Draft not saved yet');
@@ -117,6 +126,7 @@ export function AdminEditor() {
   const [manualExternalLinks, setManualExternalLinks] = useState('https://www.bankofengland.co.uk');
   const [contextMenu, setContextMenu] = useState<{ blockId: string; selectedText: string; x: number; y: number } | null>(null);
   const [linkUrl, setLinkUrl] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
   const savedRangeRef = useRef<Range | null>(null);
 
   useEffect(() => {
@@ -268,14 +278,52 @@ export function AdminEditor() {
     savedRangeRef.current = null;
   };
 
+  const persistPost = async (nextStatus: PostStatus) => {
+    if (!supabase) {
+      setSavedMessage('Supabase is not configured');
+      return;
+    }
+    setIsSaving(true);
+    const payload = {
+      blocks,
+      categories: Array.from(selectedCategories),
+      excerpt,
+      external_links: splitLinks(manualExternalLinks),
+      featured_image_url: featuredImageUrl || null,
+      focus_keyword: focusKeyword,
+      internal_links: splitLinks(manualInternalLinks),
+      meta_description: metaDescription,
+      published_at: nextStatus === 'published' ? new Date().toISOString() : null,
+      seo_score: seo.score,
+      seo_title: seoTitle,
+      slug: slug || slugify(title),
+      status: nextStatus,
+      title,
+      word_count: wordCount,
+    };
+
+    const query = currentPostId
+      ? supabase.from('posts').update(payload).eq('id', currentPostId).select('id').single()
+      : supabase.from('posts').insert(payload).select('id').single();
+    const { data, error } = await query;
+    setIsSaving(false);
+
+    if (error) {
+      setSavedMessage(`Save failed: ${error.message}`);
+      return;
+    }
+
+    setCurrentPostId(data.id);
+    setStatus(nextStatus);
+    setSavedMessage(`${nextStatus === 'published' ? 'Published' : 'Draft saved'} at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+  };
+
   const saveDraft = () => {
-    setStatus('draft');
-    setSavedMessage(`Draft saved at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+    void persistPost('draft');
   };
 
   const publishPost = () => {
-    setStatus('published');
-    setSavedMessage(`Published at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+    void persistPost('published');
   };
 
   return (
@@ -289,17 +337,24 @@ export function AdminEditor() {
           </div>
         </div>
         <div className="admin-toolbar__stats">
+          <span className="admin-user-pill">
+            <ShieldCheck size={14} />
+            {adminEmail} ({adminRole})
+          </span>
           <span className={seo.score >= 70 ? 'admin-score is-good' : 'admin-score'}>SEO {seo.score}/100</span>
           <span>{wordCount} words</span>
         </div>
         <div className="admin-toolbar__actions">
-          <button type="button" onClick={saveDraft}>
+          <button type="button" onClick={saveDraft} disabled={isSaving}>
             <Save size={16} />
             Save Draft
           </button>
-          <button type="button" className="admin-publish" onClick={publishPost}>
+          <button type="button" className="admin-publish" onClick={publishPost} disabled={isSaving}>
             <Send size={16} />
             Publish
+          </button>
+          <button type="button" onClick={() => void onSignOut()}>
+            Sign out
           </button>
         </div>
       </header>
@@ -827,4 +882,11 @@ function slugify(value: string) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function splitLinks(value: string) {
+  return value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
 }
