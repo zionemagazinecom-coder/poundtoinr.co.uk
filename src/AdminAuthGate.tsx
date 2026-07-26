@@ -134,12 +134,30 @@ function AdminAuthController({
       .ilike('email', userEmail)
       .maybeSingle<AdminUserRow>();
 
+    if (!error && data) {
+      setAuthState({ admin: data, kind: 'allowed', session: adminSession });
+      return;
+    }
+
+    const { data: rpcIsAdmin } = await supabase.rpc('is_admin');
+    if (rpcIsAdmin === true) {
+      setAuthState({
+        admin: {
+          email: userEmail,
+          id: adminSession.user.id,
+          is_active: true,
+          role: 'owner',
+        },
+        kind: 'allowed',
+        session: adminSession,
+      });
+      return;
+    }
+
     if (error || !data) {
       setAuthState({ email: userEmail, kind: 'denied' });
       return;
     }
-
-    setAuthState({ admin: data, kind: 'allowed', session: adminSession });
   };
 
   const signInWithPassword = async (event: FormEvent) => {
