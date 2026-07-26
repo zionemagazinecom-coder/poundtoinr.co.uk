@@ -1,0 +1,2 @@
+# No authorized advertising sellers yet.
+# Add the Google AdSense publisher line after the real publisher ID is available.

@@ -2,10 +2,11 @@ import { BarChart3, BriefcaseBusiness, GraduationCap, Plane, ShieldCheck, Wallet
 import { useEffect, useMemo, useState, type PointerEvent } from 'react';
 import { AdminAuthGate, AdminAuthPage } from './AdminAuthGate';
 import { AdminEditor } from './AdminEditor';
+import { CookieConsent } from './components/CookieConsent';
 import { Converter } from './components/Converter';
 import { SeoRoutePage, buildHomeSchema, homeSeo, seoPages, usePageSeo } from './SeoContent';
 import { exchangeRateProvider, type NormalisedRate } from './lib/exchangeRateProvider';
-import { getPublishedPosts, getRealRateSnapshots, type PublishedPost, type RateSnapshot } from './lib/liveContent';
+import { getPublishedPostBySlug, getPublishedPosts, getRealRateSnapshots, type PublishedPost, type PublishedPostBlock, type RateSnapshot } from './lib/liveContent';
 
 const trustCards: Array<[string, string, LucideIcon]> = [
   ['Independent data', 'Every figure on this page is pulled from reference-rate architecture, so you are never reading a stale number without a label.', ShieldCheck],
@@ -44,6 +45,9 @@ export function App() {
   }
   if (seoPages[path]) {
     return <SeoRoutePage page={seoPages[path]} />;
+  }
+  if (path.startsWith('/guides/') || path.startsWith('/news/')) {
+    return <PostRoutePage path={path} />;
   }
   return <PublicApp path={path} />;
 }
@@ -262,7 +266,7 @@ function PublicApp({ path }: { path: string }) {
                 <span>{post.categories[0] ?? 'Guide'}</span>
                 <h3>{post.title}</h3>
                 <p>{post.excerpt || 'Published from the CMS.'}</p>
-                <a href="/guides">Read the guide <b>{'->'}</b></a>
+                <a href={`/guides/${post.slug}`}>Read the guide <b>{'->'}</b></a>
               </article>
             )) : <EmptyContentCard message="No published guide posts yet. Publish from /admin and they will appear here." />}
           </div>
@@ -279,6 +283,7 @@ function PublicApp({ path }: { path: string }) {
                 <span>{post.publishedAt ? formatDate(post.publishedAt) : 'Published'}</span>
                 <h3>{post.title}</h3>
                 <p>{post.excerpt || 'Published from the CMS.'}</p>
+                <a href={`/news/${post.slug}`}>Read note <b>{'->'}</b></a>
               </article>
             )) : <EmptyContentCard message="No published market notes yet. Static market notes are disabled." />}
           </div>
@@ -342,6 +347,92 @@ function PublicApp({ path }: { path: string }) {
           <a href="/cookie-policy">Cookie policy</a>
         </div>
       </footer>
+      <CookieConsent />
+    </div>
+  );
+}
+
+function PostRoutePage({ path }: { path: string }) {
+  const [post, setPost] = useState<PublishedPost | null>(null);
+  const [loaded, setLoaded] = useState(false);
+  const slug = path.split('/').filter(Boolean).pop() ?? '';
+  const section = path.startsWith('/news/') ? 'news' : 'guides';
+
+  useEffect(() => {
+    let active = true;
+    getPublishedPostBySlug(slug).then((nextPost) => {
+      if (!active) return;
+      setPost(nextPost);
+      setLoaded(true);
+    });
+    return () => {
+      active = false;
+    };
+  }, [slug]);
+
+  usePageSeo({
+    description: post?.excerpt || 'Published GBP to INR guide from PoundToINR.co.uk.',
+    noindex: loaded && !post,
+    path,
+    schema: post ? buildPostSchema(post, path) : undefined,
+    title: post ? `${post.title} | PoundToINR.co.uk` : 'Article loading | PoundToINR.co.uk',
+  });
+
+  return (
+    <div className="site-shell content-shell">
+      <header className="topbar">
+        <nav className="nav-wrap">
+          <a className="brand" href="/">
+            <span>{'\u00a3'}</span>
+            <strong>Pound<em>ToINR</em></strong>
+          </a>
+          <div className="nav-links">
+            <a href="/gbp-to-inr">Converter</a>
+            <a href="/guides">Guides</a>
+            <a href="/news">News</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <a className="nav-cta" href="/#converter">Convert now</a>
+        </nav>
+      </header>
+      <main id="main" className="content-main">
+        <article className="content-article">
+          {!loaded ? (
+            <p className="content-intro">Loading published article...</p>
+          ) : post ? (
+            <>
+              <p className="content-eyebrow">{post.categories[0] ?? (section === 'news' ? 'Market note' : 'Guide')}</p>
+              <h1>{post.title}</h1>
+              <p className="content-intro">{post.excerpt}</p>
+              <p className="content-updated">Last updated: {formatDate(post.publishedAt ?? post.createdAt)}</p>
+              {post.featuredImageUrl ? <img className="post-featured-image" src={post.featuredImageUrl} alt="" /> : null}
+              {(post.blocks ?? []).map((block) => renderPostBlock(block))}
+            </>
+          ) : (
+            <>
+              <p className="content-eyebrow">Not found</p>
+              <h1>Article not found</h1>
+              <p className="content-intro">This article is not published or the URL has changed.</p>
+            </>
+          )}
+        </article>
+        <aside className="content-aside" aria-label="Related pages">
+          <h2>Useful pages</h2>
+          <a href="/gbp-to-inr">GBP to INR converter</a>
+          <a href="/guides">Transfer guides</a>
+          <a href="/news">Market notes</a>
+          <a href="/contact">Contact</a>
+        </aside>
+      </main>
+      <footer className="footer">
+        <div>
+          <a className="footer-brand" href="/">Pound<em>ToINR</em></a>
+          <p>Independent GBP to INR exchange rate data, transfer research and plain-English finance explainers for people moving money between Britain and India.</p>
+          <small>Mid-market reference rates are informational only. We are not a money-transfer provider and do not hold client funds.</small>
+        </div>
+      </footer>
+      <CookieConsent />
     </div>
   );
 }
@@ -354,6 +445,89 @@ function EmptyContentCard({ message }: { message: string }) {
       <p>{message}</p>
     </article>
   );
+}
+
+function renderPostBlock(block: PublishedPostBlock) {
+  if (block.type === 'image') {
+    return block.url ? <img key={block.id} src={block.url} alt={block.alt ?? ''} /> : null;
+  }
+  if (block.type === 'html') {
+    return <div key={block.id} dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.code ?? '') }} />;
+  }
+  if (block.type === 'list') {
+    return <ul key={block.id} dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html ?? '') }} />;
+  }
+  const Tag = block.type === 'paragraph' ? 'p' : block.type;
+  return <Tag key={block.id} dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html ?? '') }} />;
+}
+
+function buildPostSchema(post: PublishedPost, path: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    dateModified: post.publishedAt ?? post.createdAt,
+    datePublished: post.publishedAt ?? post.createdAt,
+    description: post.excerpt,
+    headline: post.title,
+    inLanguage: 'en-GB',
+    mainEntityOfPage: `https://poundtoinr.co.uk${path}`,
+    publisher: {
+      '@type': 'Organization',
+      email: 'zionemagazine.com@gmail.com',
+      name: 'PoundToINR.co.uk',
+      url: 'https://poundtoinr.co.uk',
+    },
+    url: `https://poundtoinr.co.uk${path}`,
+  };
+}
+
+function sanitizeHtml(input: string) {
+  if (!input.trim()) return '';
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(`<div>${input}</div>`, 'text/html');
+  const allowedTags = new Set(['A', 'B', 'BLOCKQUOTE', 'BR', 'CODE', 'DIV', 'EM', 'H1', 'H2', 'H3', 'H4', 'I', 'IMG', 'LI', 'OL', 'P', 'PRE', 'SPAN', 'STRONG', 'U', 'UL']);
+  const allowedAttributes = new Set(['alt', 'class', 'href', 'rel', 'src', 'target', 'title']);
+  const blockedTags = new Set(['EMBED', 'IFRAME', 'OBJECT', 'SCRIPT', 'STYLE']);
+
+  const walk = (node: Node) => {
+    [...node.childNodes].forEach((child) => {
+      if (child.nodeType === Node.ELEMENT_NODE) {
+        const element = child as HTMLElement;
+        if (blockedTags.has(element.tagName)) {
+          element.remove();
+          return;
+        }
+        if (!allowedTags.has(element.tagName)) {
+          element.replaceWith(...element.childNodes);
+          return;
+        }
+        [...element.attributes].forEach((attribute) => {
+          const name = attribute.name.toLowerCase();
+          if (!allowedAttributes.has(name) || name.startsWith('on')) {
+            element.removeAttribute(attribute.name);
+          }
+        });
+        if (element.tagName === 'A') {
+          const href = element.getAttribute('href') ?? '';
+          if (/^javascript:/i.test(href)) {
+            element.removeAttribute('href');
+          }
+          if (/^https?:\/\//i.test(href)) {
+            element.setAttribute('target', '_blank');
+            element.setAttribute('rel', 'nofollow noopener');
+          }
+        }
+        if (element.tagName === 'IMG' && /^javascript:/i.test(element.getAttribute('src') ?? '')) {
+          element.removeAttribute('src');
+        }
+      }
+      walk(child);
+    });
+  };
+
+  walk(doc.body);
+  return doc.body.firstElementChild?.innerHTML ?? '';
 }
 
 function isGuidePost(post: PublishedPost) {

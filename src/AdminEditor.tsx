@@ -44,6 +44,24 @@ type AdminEditorProps = {
   onSignOut: () => Promise<void>;
 };
 
+type ExistingPost = {
+  blocks: Block[];
+  categories: string[];
+  excerpt: string;
+  external_links: string[];
+  featured_image_url: string | null;
+  focus_keyword: string;
+  id: string;
+  internal_links: string[];
+  meta_description: string;
+  published_at: string | null;
+  seo_title: string;
+  slug: string;
+  status: PostStatus;
+  title: string;
+  updated_at: string;
+};
+
 const sampleImages = [
   {
     label: 'Currency desk',
@@ -227,6 +245,7 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
   const [contextMenu, setContextMenu] = useState<{ blockId: string; selectedText: string; x: number; y: number } | null>(null);
   const [linkUrl, setLinkUrl] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [postList, setPostList] = useState<ExistingPost[]>([]);
   const savedRangeRef = useRef<Range | null>(null);
 
   useEffect(() => {
@@ -249,6 +268,10 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
         robots.remove();
       }
     };
+  }, []);
+
+  useEffect(() => {
+    void refreshPostList();
   }, []);
 
   const articleText = useMemo(() => stripHtml(`${title} ${blocks.map(blockToPlainText).join(' ')}`), [blocks, title]);
@@ -416,6 +439,7 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
     setCurrentPostId(data.id);
     setStatus(nextStatus);
     setSavedMessage(`${nextStatus === 'published' ? 'Published' : 'Draft saved'} at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+    await refreshPostList();
   };
 
   const saveDraft = () => {
@@ -424,6 +448,44 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
 
   const publishPost = () => {
     void persistPost('published');
+  };
+
+  const refreshPostList = async () => {
+    if (!supabase) return;
+    const { data } = await supabase
+      .from('posts')
+      .select('id,title,slug,status,excerpt,featured_image_url,categories,blocks,seo_title,meta_description,focus_keyword,internal_links,external_links,published_at,updated_at')
+      .order('updated_at', { ascending: false })
+      .limit(20);
+    setPostList((data as ExistingPost[] | null) ?? []);
+  };
+
+  const loadPost = (post: ExistingPost) => {
+    setCurrentPostId(post.id);
+    setTitle(post.title);
+    setBlocks(post.blocks?.length ? post.blocks : [createBlock('paragraph')]);
+    setStatus(post.status);
+    setSlug(post.slug);
+    setExcerpt(post.excerpt);
+    setFeaturedImageUrl(post.featured_image_url ?? '');
+    setSelectedCategories(new Set(post.categories ?? []));
+    setFocusKeyword(post.focus_keyword);
+    setSeoTitle(post.seo_title);
+    setMetaDescription(post.meta_description);
+    setManualInternalLinks((post.internal_links ?? []).join('\n'));
+    setManualExternalLinks((post.external_links ?? []).join('\n'));
+    setSelectedBlockIds(new Set());
+    setSavedMessage(`Loaded "${post.title}"`);
+  };
+
+  const deletePost = async (post: ExistingPost) => {
+    if (!supabase || !window.confirm(`Delete "${post.title}"?`)) return;
+    const { error } = await supabase.from('posts').delete().eq('id', post.id);
+    if (!error && currentPostId === post.id) {
+      setCurrentPostId(null);
+    }
+    setSavedMessage(error ? `Delete failed: ${error.message}` : 'Post deleted');
+    await refreshPostList();
   };
 
   const publishStarterContent = async () => {
@@ -446,6 +508,7 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
     const { error } = await supabase.from('posts').upsert(payload, { onConflict: 'slug' });
     const snapshotError = error ? null : await captureCurrentSnapshot();
     setIsSaving(false);
+    await refreshPostList();
     setSavedMessage(
       error
         ? `Starter content failed: ${error.message}`
@@ -585,6 +648,26 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
         </section>
 
         <aside className="admin-sidebar">
+          <details open className="admin-panel">
+            <summary>
+              Posts
+              <ChevronDown size={16} />
+            </summary>
+            <div className="admin-post-list">
+              <button type="button" onClick={refreshPostList}>Refresh posts</button>
+              {postList.length ? postList.map((post) => (
+                <article key={post.id} className={currentPostId === post.id ? 'is-current' : ''}>
+                  <div>
+                    <strong>{post.title}</strong>
+                    <span>{post.status} /{post.slug}</span>
+                  </div>
+                  <button type="button" onClick={() => loadPost(post)}>Edit</button>
+                  <button type="button" className="admin-danger" onClick={() => void deletePost(post)}>Delete</button>
+                </article>
+              )) : <p>No posts found.</p>}
+            </div>
+          </details>
+
           <details open className="admin-panel">
             <summary>
               Post settings

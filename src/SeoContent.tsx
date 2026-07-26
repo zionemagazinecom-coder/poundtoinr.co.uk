@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useEffect } from 'react';
+import { CookieConsent } from './components/CookieConsent';
 
 const siteUrl = 'https://poundtoinr.co.uk';
 const siteName = 'PoundToINR.co.uk';
@@ -394,6 +395,7 @@ export function SeoRoutePage({ page }: { page: SeoPage }) {
         </aside>
       </main>
       <SiteFooter />
+      <CookieConsent />
     </div>
   );
 }

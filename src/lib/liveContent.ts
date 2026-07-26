@@ -1,6 +1,7 @@
 import { publicSupabasePublishableKey, publicSupabaseUrl, supabase } from './supabaseClient';
 
 export type PublishedPost = {
+  blocks?: PublishedPostBlock[];
   categories: string[];
   createdAt: string;
   excerpt: string;
@@ -10,6 +11,15 @@ export type PublishedPost = {
   title: string;
 };
 
+export type PublishedPostBlock = {
+  alt?: string;
+  code?: string;
+  html?: string;
+  id: string;
+  type: 'paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'list' | 'image' | 'html';
+  url?: string;
+};
+
 export type RateSnapshot = {
   fetchedAt: string;
   providerTimestamp: string | null;
@@ -17,6 +27,7 @@ export type RateSnapshot = {
 };
 
 type PostRow = {
+  blocks?: PublishedPostBlock[] | null;
   categories: string[] | null;
   created_at: string;
   excerpt: string | null;
@@ -45,6 +56,7 @@ export async function getPublishedPosts(limit = 12): Promise<PublishedPost[]> {
   if (error || !data) return [];
 
   return (data as PostRow[]).map((post) => ({
+    blocks: post.blocks ?? undefined,
     categories: post.categories ?? [],
     createdAt: post.created_at,
     excerpt: post.excerpt ?? '',
@@ -53,6 +65,31 @@ export async function getPublishedPosts(limit = 12): Promise<PublishedPost[]> {
     slug: post.slug,
     title: post.title,
   }));
+}
+
+export async function getPublishedPostBySlug(slug: string): Promise<PublishedPost | null> {
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from('posts')
+    .select('title, slug, excerpt, categories, featured_image_url, published_at, created_at, blocks')
+    .eq('status', 'published')
+    .eq('slug', slug)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  const post = data as PostRow;
+  return {
+    blocks: post.blocks ?? [],
+    categories: post.categories ?? [],
+    createdAt: post.created_at,
+    excerpt: post.excerpt ?? '',
+    featuredImageUrl: post.featured_image_url,
+    publishedAt: post.published_at,
+    slug: post.slug,
+    title: post.title,
+  };
 }
 
 export async function getRealRateSnapshots(limit = 90): Promise<RateSnapshot[]> {
