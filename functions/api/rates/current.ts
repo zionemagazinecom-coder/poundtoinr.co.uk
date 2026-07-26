@@ -4,6 +4,9 @@ type PagesFunctionContext = {
     EXCHANGE_RATE_API_KEY?: string;
     EXCHANGE_RATE_API_BASE_URL?: string;
     EXCHANGE_RATE_CACHE_TTL_SECONDS?: string;
+    SUPABASE_SERVICE_ROLE_KEY?: string;
+    SUPABASE_URL?: string;
+    VITE_SUPABASE_URL?: string;
   };
 };
 
@@ -42,7 +45,7 @@ export async function onRequestGet(context: PagesFunctionContext): Promise<Respo
       return json({ error: 'Exchange-rate provider returned an invalid response.' }, 502, ttl);
     }
 
-    return json({
+    const payload = {
       base,
       quote,
       rate: providerPayload.conversion_rate,
@@ -50,10 +53,63 @@ export async function onRequestGet(context: PagesFunctionContext): Promise<Respo
       providerTimestamp: providerPayload.time_last_update_utc ?? fetchedAt,
       fetchedAt,
       status: 'delayed',
+    };
+
+    const snapshotSaved = await saveRateSnapshot(context.env, payload);
+
+    return json({
+      ...payload,
+      snapshotSaved,
     }, 200, ttl);
   } catch {
     return json({ error: 'Exchange-rate request failed.' }, 502, ttl);
   }
+}
+
+async function saveRateSnapshot(
+  env: PagesFunctionContext['env'],
+  rate: {
+    base: string;
+    fetchedAt: string;
+    providerName: string;
+    providerTimestamp: unknown;
+    quote: string;
+    rate: number;
+    status: 'delayed';
+  },
+): Promise<boolean> {
+  const supabaseUrl = env.SUPABASE_URL ?? env.VITE_SUPABASE_URL;
+  const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseUrl || !serviceRoleKey) {
+    return false;
+  }
+
+  const response = await fetch(`${supabaseUrl.replace(/\/+$/, '')}/rest/v1/exchange_rate_snapshots`, {
+    body: JSON.stringify({
+      base_currency: rate.base,
+      data_status: rate.status,
+      fetched_at: rate.fetchedAt,
+      provider_name: rate.providerName,
+      provider_timestamp: parseProviderTimestamp(rate.providerTimestamp),
+      quote_currency: rate.quote,
+      rate: rate.rate,
+    }),
+    headers: {
+      apikey: serviceRoleKey,
+      authorization: `Bearer ${serviceRoleKey}`,
+      'content-type': 'application/json',
+      prefer: 'return=minimal',
+    },
+    method: 'POST',
+  });
+
+  return response.ok;
+}
+
+function parseProviderTimestamp(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
 }
 
 function normaliseCurrency(value: string): string | null {

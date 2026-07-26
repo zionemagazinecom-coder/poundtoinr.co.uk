@@ -23,6 +23,8 @@ EXCHANGE_RATE_API_PROVIDER=exchangerate-api
 EXCHANGE_RATE_API_KEY=<rotate-and-paste-your-key>
 EXCHANGE_RATE_API_BASE_URL=https://v6.exchangerate-api.com/v6
 EXCHANGE_RATE_CACHE_TTL_SECONDS=3600
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=<server-only-service-role-key>
 ```
 
 The current server route is:
@@ -32,3 +34,4 @@ The current server route is:
 ```
 
 It calls ExchangeRate-API from the Cloudflare side and returns a normalised response to the browser.
+When `SUPABASE_SERVICE_ROLE_KEY` is configured, the same route also stores a real GBP/INR snapshot in Supabase for the public history chart. Never expose the service-role key through `VITE_` variables.

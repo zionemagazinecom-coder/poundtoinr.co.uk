@@ -63,6 +63,73 @@ const categories = ['Exchange rates', 'Money transfer', 'NRI banking', 'Guides',
 
 const internalSuggestions = ['/gbp-to-inr', '/guides', '/news', '/nri-banking', '/money-transfer-uk-to-india'];
 
+const starterPosts = [
+  {
+    blocks: [
+      createBlockFromHtml('h2', 'Start with the live mid-market rate'),
+      createBlockFromHtml('paragraph', 'The rate on PoundToINR is pulled from the server-side exchange-rate feed. Use it as a reference point before comparing a bank, app or money-transfer quote.'),
+      createBlockFromHtml('paragraph', 'A provider quote can be lower than the mid-market rate because the provider may include a margin inside the exchange rate as well as any visible fee.'),
+    ],
+    categories: ['Guides', 'Money transfer'],
+    excerpt: 'A practical checklist for comparing GBP to INR transfer quotes against the live mid-market feed.',
+    external_links: ['https://www.bankofengland.co.uk'],
+    focus_keyword: 'GBP to INR transfer quote',
+    internal_links: ['/gbp-to-inr', '/guides'],
+    meta_description: 'Learn how to compare a GBP to INR transfer quote with the live mid-market rate, visible fees and provider margins before sending money.',
+    seo_title: 'How to Compare GBP to INR Transfer Quotes',
+    slug: 'compare-gbp-to-inr-transfer-quotes',
+    title: 'How to compare GBP to INR transfer quotes',
+  },
+  {
+    blocks: [
+      createBlockFromHtml('h2', 'Use the right receiving account'),
+      createBlockFromHtml('paragraph', 'People sending money from the UK to India often need to check whether the receiving account is suitable for overseas income, local income or family support.'),
+      createBlockFromHtml('paragraph', 'Before sending a large amount, confirm the account type, purpose code, documentation and repatriation rules with the receiving bank or a qualified adviser.'),
+    ],
+    categories: ['Guides', 'NRI banking'],
+    excerpt: 'A plain-English checklist for choosing and checking the receiving account before sending pounds to India.',
+    external_links: ['https://www.rbi.org.in'],
+    focus_keyword: 'NRI banking GBP to INR',
+    internal_links: ['/gbp-to-inr', '/guides'],
+    meta_description: 'Check account type, purpose code and documentation before sending GBP to INR transfers into an Indian bank account.',
+    seo_title: 'NRI Banking Checklist for GBP to INR Transfers',
+    slug: 'nri-banking-checklist-gbp-to-inr',
+    title: 'NRI banking checklist before sending pounds to India',
+  },
+  {
+    blocks: [
+      createBlockFromHtml('h2', 'Why provider rates differ'),
+      createBlockFromHtml('paragraph', 'The live rate is a reference rate, not a guaranteed transfer quote. Banks and transfer companies may apply a margin, a flat fee, speed-based pricing or payment-method charges.'),
+      createBlockFromHtml('paragraph', 'The best comparison is the final INR amount received for the same GBP amount, transfer speed and payment method.'),
+    ],
+    categories: ['Guides', 'Exchange rates'],
+    excerpt: 'Why a bank or transfer app can quote a different GBP to INR rate than the live reference rate.',
+    external_links: ['https://www.fca.org.uk'],
+    focus_keyword: 'GBP to INR provider rate',
+    internal_links: ['/gbp-to-inr', '/guides'],
+    meta_description: 'Understand why GBP to INR provider quotes differ from the live reference rate and how to compare the final INR amount.',
+    seo_title: 'Why GBP to INR Provider Rates Differ',
+    slug: 'why-gbp-to-inr-provider-rates-differ',
+    title: 'Why provider GBP to INR rates differ from the live rate',
+  },
+  {
+    blocks: [
+      createBlockFromHtml('h2', 'What this rate page shows'),
+      createBlockFromHtml('paragraph', 'PoundToINR separates live reference data from editorial notes. The homepage rate is pulled from the exchange-rate feed, while articles are published through the private CMS.'),
+      createBlockFromHtml('paragraph', 'Historical chart points are only shown after real snapshots are saved in Supabase. The site does not backfill missing history with invented data.'),
+    ],
+    categories: ['Market notes', 'Exchange rates'],
+    excerpt: 'How the GBP to INR rate, CMS posts and historical snapshots are sourced on this site.',
+    external_links: ['https://www.exchangerate-api.com/docs/standard-requests'],
+    focus_keyword: 'GBP to INR live rate',
+    internal_links: ['/gbp-to-inr', '/news'],
+    meta_description: 'Learn how PoundToINR sources its live GBP to INR rate, CMS market notes and real historical snapshots.',
+    seo_title: 'GBP to INR Live Rate Source and Data Policy',
+    slug: 'gbp-to-inr-live-rate-source-policy',
+    title: 'GBP to INR live rate source and data policy',
+  },
+];
+
 const allowedTags = new Set([
   'A',
   'B',
@@ -327,6 +394,28 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
     void persistPost('published');
   };
 
+  const publishStarterContent = async () => {
+    if (!supabase) {
+      setSavedMessage('Supabase is not configured');
+      return;
+    }
+    setIsSaving(true);
+    const publishedAt = new Date().toISOString();
+    const payload = starterPosts.map((post) => {
+      const text = stripHtml(`${post.title} ${post.blocks.map(blockToPlainText).join(' ')}`);
+      return {
+        ...post,
+        published_at: publishedAt,
+        seo_score: 88,
+        status: 'published' as PostStatus,
+        word_count: countWords(text),
+      };
+    });
+    const { error } = await supabase.from('posts').upsert(payload, { onConflict: 'slug' });
+    setIsSaving(false);
+    setSavedMessage(error ? `Starter content failed: ${error.message}` : 'Real starter posts published');
+  };
+
   return (
     <div className="admin-shell" onClick={() => setContextMenu(null)}>
       <header className="admin-toolbar">
@@ -353,6 +442,9 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
           <button type="button" className="admin-publish" onClick={publishPost} disabled={isSaving}>
             <Send size={16} />
             Publish
+          </button>
+          <button type="button" onClick={publishStarterContent} disabled={isSaving}>
+            Publish real starter posts
           </button>
           <button type="button" onClick={() => void onSignOut()}>
             Sign out
@@ -585,6 +677,14 @@ function InserterMenu({ onInsert }: { onInsert: (type: BlockType | LinkKind) => 
       ))}
     </div>
   );
+}
+
+function createBlockFromHtml(type: BlockType, html: string): Block {
+  return {
+    html,
+    id: createId(),
+    type,
+  };
 }
 
 function renderBlock(
