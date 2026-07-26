@@ -193,13 +193,24 @@ function PublicApp({ path }: { path: string }) {
               </svg>
             ) : (
               <div className="history-empty">
-                <strong>{snapshots.length ? `${snapshots.length} real snapshot stored` : 'No real history stored yet'}</strong>
-                <p>{snapshots.length ? 'The chart line will appear after at least two real GBP/INR snapshots are saved.' : 'Live GBP/INR is working from the API, but historical chart points will appear only after real snapshots are saved in Supabase.'}</p>
+                {snapshots.length ? (
+                  <>
+                    <span>First verified point</span>
+                    <strong>{'\u20b9'}{formatRate(snapshots[snapshots.length - 1].rate)}</strong>
+                    <p>Saved on {formatDateTime(snapshots[snapshots.length - 1].fetchedAt)}. The line chart will draw automatically after the next verified snapshot is saved.</p>
+                  </>
+                ) : (
+                  <>
+                    <span>History starting now</span>
+                    <strong>No snapshot stored yet</strong>
+                    <p>Live GBP/INR is working from the API. Historical points appear only after verified snapshots are saved in Supabase.</p>
+                  </>
+                )}
               </div>
             )}
             <div className="chart-footer">
               <span>Reference rate, not a guaranteed provider quote</span>
-              <span>Fake chart data disabled</span>
+              <span>Only verified snapshots shown</span>
             </div>
           </div>
         </section>
@@ -234,7 +245,7 @@ function PublicApp({ path }: { path: string }) {
             {conversionAmounts.map((amount) => (
               <article key={amount} className="hover-card" onPointerMove={updateCardLight}>
                 <span>{'\u00a3'}{amount.toLocaleString('en-GB')}</span>
-                <strong>{liveRate ? `₹${(amount * liveRate.rate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}` : 'Live rate needed'}</strong>
+                <strong>{liveRate ? `${'\u20b9'}${(amount * liveRate.rate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}` : 'Live rate needed'}</strong>
               </article>
             ))}
           </div>
@@ -289,8 +300,19 @@ function PublicApp({ path }: { path: string }) {
         </section>
 
         <section className="newsletter">
-          <h2>Watch GBP/INR without refreshing the chart all day</h2>
-          <p>Email alerts are not connected yet, so this site is not collecting addresses until a real email provider is added.</p>
+          <div>
+            <span>Data policy</span>
+            <h2>Real alerts will only launch after email delivery is connected</h2>
+            <p>Until then, PoundToINR shows live rates, CMS-published guides and verified Supabase snapshots without collecting visitor email addresses.</p>
+          </div>
+          <div className="newsletter-status">
+            <span>Live rate feed</span>
+            <strong>Active</strong>
+            <span>CMS publishing</span>
+            <strong>Active</strong>
+            <span>Email alerts</span>
+            <strong>Not collecting yet</strong>
+          </div>
         </section>
       </main>
 
