@@ -1279,6 +1279,20 @@ select,
   margin: 0 0 16px;
 }
 
+.content-article a {
+  color: #2ee6bd;
+  font-weight: 850;
+  text-decoration: underline;
+  text-decoration-color: rgba(46, 230, 189, 0.58);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.content-article a:hover {
+  color: #8fffe8;
+  text-decoration-color: #8fffe8;
+}
+
 .content-aside {
   background: rgba(15, 25, 41, 0.72);
   border: 1px solid rgba(148, 163, 184, 0.2);
