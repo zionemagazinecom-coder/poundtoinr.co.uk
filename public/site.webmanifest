@@ -1,7 +1,7 @@
 {
   "name": "PoundToINR.co.uk",
   "short_name": "PoundToINR",
-  "description": "GBP to INR live rate, converter and money-transfer guides.",
+  "description": "Pound to INR live rate, converter and money-transfer guides.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#030914",

@@ -23,7 +23,7 @@ const audience: Array<[string, LucideIcon]> = [
 ];
 
 const faqs = [
-  ['What is the GBP to INR exchange rate today?', 'The figure at the top of this page is an indicative mid-market reference rate. Your bank or transfer provider may quote a different rate.'],
+  ['What is the pound to INR exchange rate today?', 'The figure at the top of this page is an indicative mid-market reference rate. Your bank or transfer provider may quote a different rate.'],
   ['Why is the rate my bank offers lower than the one shown here?', 'Banks and transfer companies usually add a margin to the mid-market rate, and some also add a flat fee on top.'],
   ['When is the best time to send money from the UK to India?', 'There is no guaranteed best moment. Compare the provider quote, visible fee and total rupees received before sending.'],
   ['How much money can I send from the UK to India?', 'Limits depend on your provider, payment method, identity checks and receiving account. Always confirm with your chosen provider.'],
@@ -161,7 +161,7 @@ function PublicApp({ path }: { path: string }) {
           <div className="history-card">
             <div className="history-head">
               <div>
-                <h2 id="chart-title">GBP to INR history</h2>
+                <h2 id="chart-title">Pound to INR history</h2>
                 <p>Only stored GBP/INR snapshots from Supabase are shown here.</p>
               </div>
               <div className="range-tabs" aria-label="Chart source">
@@ -174,7 +174,7 @@ function PublicApp({ path }: { path: string }) {
               <div><span>Period low</span><strong>{historyMetrics.low}</strong></div>
             </div>
             {chartData ? (
-              <svg viewBox="0 0 1100 330" role="img" aria-label="Real GBP to INR stored snapshot chart">
+              <svg viewBox="0 0 1100 330" role="img" aria-label="Real pound to INR stored snapshot chart">
                 <defs>
                   <linearGradient id="lineFill" x1="0" x2="0" y1="0" y2="1">
                     <stop offset="0%" stopColor="#2ee6bd" stopOpacity="0.38" />
@@ -243,7 +243,7 @@ function PublicApp({ path }: { path: string }) {
         <section className="conversions-section">
           <div className="section-heading left">
             <p>Popular conversions</p>
-            <h2>Common GBP to INR amounts</h2>
+            <h2>Common pound to INR amounts</h2>
           </div>
           <div className="conversion-grid">
             {conversionAmounts.map((amount) => (
@@ -324,12 +324,12 @@ function PublicApp({ path }: { path: string }) {
       <footer className="footer">
         <div>
           <a className="footer-brand" href="/">Pound<em>ToINR</em></a>
-          <p>Independent GBP to INR exchange rate data, transfer research and plain-English finance explainers for people moving money between Britain and India.</p>
+          <p>Independent pound to INR exchange rate data, GBP/INR research and plain-English finance explainers for people moving money between Britain and India.</p>
           <small>Mid-market reference rates are informational only. We are not a money-transfer provider and do not hold client funds.</small>
         </div>
         <div>
           <h3>Convert</h3>
-          <a href="/gbp-to-inr">GBP to INR converter</a>
+          <a href="/gbp-to-inr">Pound to INR converter</a>
           <a href="/guides">Currency & transfer guides</a>
           <a href="/news">Exchange rate news</a>
         </div>

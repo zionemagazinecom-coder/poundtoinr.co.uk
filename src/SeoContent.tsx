@@ -320,9 +320,9 @@ export const seoPages: Record<string, SeoPage> = {
 };
 
 export const homeSeo = {
-  description: 'Convert GBP to INR with transparent mid-market reference rates, historical pound to rupee charts, transfer-cost education and UK to India money guides.',
+  description: 'Convert pound to INR with transparent mid-market reference rates, historical pound to rupee charts, GBP/INR data and UK to India money guides.',
   path: '/',
-  title: 'GBP to INR Currency Converter | Pound to Rupee Rate Today',
+  title: 'Pound to INR Currency Converter | Pound to Rupee Rate Today',
 };
 
 export function usePageSeo({
@@ -387,7 +387,7 @@ export function SeoRoutePage({ page }: { page: SeoPage }) {
         </article>
         <aside className="content-aside" aria-label="Related pages">
           <h2>Useful pages</h2>
-          <a href="/gbp-to-inr">GBP to INR converter</a>
+          <a href="/gbp-to-inr">Pound to INR converter</a>
           <a href="/guides">Transfer guides</a>
           <a href="/news">Market notes</a>
           <a href="/privacy-policy">Privacy policy</a>
@@ -432,12 +432,12 @@ export function SiteFooter() {
         <a className="footer-brand" href="/">
           Pound<em>ToINR</em>
         </a>
-        <p>Independent GBP to INR exchange rate data, transfer research and plain-English finance explainers for people moving money between Britain and India.</p>
+        <p>Independent pound to INR exchange rate data, GBP/INR research and plain-English finance explainers for people moving money between Britain and India.</p>
         <small>Mid-market reference rates are informational only. We are not a money-transfer provider and do not hold client funds.</small>
       </div>
       <div>
         <h3>Convert</h3>
-        <a href="/gbp-to-inr">GBP to INR converter</a>
+        <a href="/gbp-to-inr">Pound to INR converter</a>
         <a href="/guides">Currency & transfer guides</a>
         <a href="/news">Exchange rate news</a>
       </div>
@@ -470,9 +470,9 @@ export function buildHomeSchema() {
             '@type': 'Question',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'The GBP to INR rate shown is an indicative mid-market reference rate. Banks and transfer providers may quote a different customer rate.',
+              text: 'The pound to INR rate shown is an indicative mid-market reference rate. Banks and transfer providers may quote a different customer rate.',
             },
-            name: 'What is the GBP to INR exchange rate today?',
+            name: 'What is the pound to INR exchange rate today?',
           },
           {
             '@type': 'Question',
@@ -487,7 +487,7 @@ export function buildHomeSchema() {
       {
         '@type': 'WebApplication',
         applicationCategory: 'FinanceApplication',
-        name: 'GBP to INR Currency Converter',
+        name: 'Pound to INR Currency Converter',
         operatingSystem: 'Web',
         url: siteUrl,
       },
