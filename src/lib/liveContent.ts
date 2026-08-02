@@ -43,8 +43,20 @@ type SnapshotRow = {
   rate: number | string;
 };
 
+type BundledPostRow = {
+  blocks: PublishedPostBlock[];
+  categories: string[];
+  excerpt: string;
+  featured_image_url: string | null;
+  slug: string;
+  title: string;
+};
+
+const bundledPostsUrl = '/content/daily-posts-2026-08-02.json';
+
 export async function getPublishedPosts(limit = 12): Promise<PublishedPost[]> {
-  if (!supabase) return [];
+  const bundledPosts = await getBundledPosts();
+  if (!supabase) return bundledPosts.slice(0, limit);
 
   const { data, error } = await supabase
     .from('posts')
@@ -53,9 +65,9 @@ export async function getPublishedPosts(limit = 12): Promise<PublishedPost[]> {
     .order('published_at', { ascending: false, nullsFirst: false })
     .limit(limit);
 
-  if (error || !data) return [];
+  if (error || !data) return bundledPosts.slice(0, limit);
 
-  return (data as PostRow[]).map((post) => ({
+  const databasePosts = (data as PostRow[]).map((post) => ({
     blocks: post.blocks ?? undefined,
     categories: post.categories ?? [],
     createdAt: post.created_at,
@@ -65,10 +77,13 @@ export async function getPublishedPosts(limit = 12): Promise<PublishedPost[]> {
     slug: post.slug,
     title: post.title,
   }));
+  const databaseSlugs = new Set(databasePosts.map((post) => post.slug));
+  return [...bundledPosts.filter((post) => !databaseSlugs.has(post.slug)), ...databasePosts].slice(0, limit);
 }
 
 export async function getPublishedPostBySlug(slug: string): Promise<PublishedPost | null> {
-  if (!supabase) return null;
+  const bundledPost = (await getBundledPosts()).find((post) => post.slug === slug) ?? null;
+  if (!supabase) return bundledPost;
 
   const { data, error } = await supabase
     .from('posts')
@@ -77,7 +92,7 @@ export async function getPublishedPostBySlug(slug: string): Promise<PublishedPos
     .eq('slug', slug)
     .maybeSingle();
 
-  if (error || !data) return null;
+  if (error || !data) return bundledPost;
 
   const post = data as PostRow;
   return {
@@ -90,6 +105,26 @@ export async function getPublishedPostBySlug(slug: string): Promise<PublishedPos
     slug: post.slug,
     title: post.title,
   };
+}
+
+async function getBundledPosts(): Promise<PublishedPost[]> {
+  try {
+    const response = await fetch(bundledPostsUrl, { headers: { accept: 'application/json' } });
+    if (!response.ok) return [];
+    const rows = await response.json() as BundledPostRow[];
+    return rows.map((post) => ({
+      blocks: post.blocks,
+      categories: post.categories,
+      createdAt: '2026-08-02T00:00:00.000Z',
+      excerpt: post.excerpt,
+      featuredImageUrl: post.featured_image_url,
+      publishedAt: '2026-08-02T00:00:00.000Z',
+      slug: post.slug,
+      title: post.title,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export async function getRealRateSnapshots(limit = 90): Promise<RateSnapshot[]> {
