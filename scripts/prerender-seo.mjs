@@ -1,0 +1,285 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+const root = process.cwd();
+const distDir = path.join(root, 'dist');
+const templatePath = path.join(distDir, 'index.html');
+const siteUrl = 'https://poundtoinr.co.uk';
+const siteName = 'PoundToINR.co.uk';
+const contactEmail = 'zionemagazine.com@gmail.com';
+
+const baseTemplate = fs.readFileSync(templatePath, 'utf8');
+
+const staticPages = [
+  {
+    path: '/about',
+    title: 'About PoundToINR.co.uk',
+    description: 'Learn about PoundToINR.co.uk, an independent pound to INR exchange-rate and money-transfer information site for UK and India readers.',
+    eyebrow: 'About',
+    intro: 'Independent pound to INR data, GBP/INR education and clear currency explainers for people moving money between Britain and India.',
+    sections: [
+      ['What this site does', 'PoundToINR.co.uk is an independent information site for people checking the British pound to Indian rupee exchange rate. The site shows the mid-market reference rate first, then explains why a bank or transfer provider quote may be different.'],
+      ['Site ownership and contact', `The site is operated as an independent editorial project for PoundToINR.co.uk. The confirmed owner and contact email for site questions is ${contactEmail}.`],
+      ['How we stay independent', 'We are not a bank, broker, remittance company or financial adviser. We publish reference-rate data, CMS-published guides and educational notes only.'],
+    ],
+  },
+  {
+    path: '/contact',
+    title: 'Contact PoundToINR.co.uk',
+    description: 'Contact PoundToINR.co.uk for editorial questions, corrections and feedback about pound to INR exchange-rate pages.',
+    eyebrow: 'Contact',
+    intro: 'Reach the editorial team for corrections, feedback and site questions.',
+    sections: [
+      ['How to contact us', `For editorial questions, corrections, partnership queries or feedback about a pound to INR page, contact the PoundToINR.co.uk team by email at ${contactEmail}.`],
+      ['Real site details', `Website: ${siteName}. Primary contact email: ${contactEmail}. Public service area: United Kingdom and India currency readers.`],
+    ],
+  },
+  {
+    path: '/guides',
+    title: 'Pound to INR Money Transfer Guides',
+    description: 'Pound to INR transfer guides explaining provider margins, NRE/NRO accounts, fees and how to compare UK to India money-transfer quotes.',
+    eyebrow: 'Guides',
+    intro: 'Practical pound to INR guides for people sending money from the UK to India.',
+    sections: [
+      ['How to compare transfer costs', 'A provider can advertise a low fee while making money inside the exchange rate. Always compare the final rupees received, not only the advertised fee.'],
+      ['Useful guide pages', 'Read our guides on comparing GBP to INR transfer quotes, NRI banking checks and why provider rates differ from live reference rates.'],
+    ],
+  },
+  {
+    path: '/news',
+    title: 'Pound to INR News and Market Notes',
+    description: 'Pound to INR market notes explaining UK rates, rupee pressure, oil prices, provider margins and transfer quote movement.',
+    eyebrow: 'Market notes',
+    intro: 'Plain-English notes on what can move the pound to rupee rate.',
+    sections: [
+      ['What moves pound to INR', 'GBP/INR is influenced by UK inflation, Bank of England expectations, Indian rupee liquidity, RBI activity, oil prices and global risk sentiment.'],
+      ['Why provider rates can lag', 'Retail transfer quotes may update on a different schedule from interbank reference prices. Compare final rupees received, not only the headline rate.'],
+    ],
+  },
+  {
+    path: '/editorial-policy',
+    title: 'Editorial Policy',
+    description: 'Read the PoundToINR.co.uk editorial policy for pound to INR rates, transfer guides, corrections, sources and commercial separation.',
+    eyebrow: 'Editorial policy',
+    intro: 'How we write, update and correct currency content for UK and India readers.',
+    sections: [
+      ['Editorial principles', 'PoundToINR.co.uk publishes currency and transfer information for education. We explain what a number means, where uncertainty exists and which assumptions sit behind a calculation.'],
+      ['Sources and updates', 'Rate pages are based on reference-rate architecture and clearly labelled timestamps. Market notes may refer to public economic information where relevant.'],
+    ],
+  },
+  {
+    path: '/privacy-policy',
+    title: 'Privacy Policy',
+    description: 'Privacy Policy for PoundToINR.co.uk, including cookies, analytics, advertising, contact messages and user choices.',
+    eyebrow: 'Privacy',
+    intro: 'How PoundToINR.co.uk handles privacy, cookies, analytics and advertising-related data.',
+    sections: [
+      ['Information we collect', 'PoundToINR.co.uk is designed to be usable without creating an account. If you contact us by email, we receive the information you choose to send.'],
+      ['Cookies and advertising', 'The site may use essential cookies for basic operation and may later use analytics or advertising cookies to support the site.'],
+    ],
+  },
+  {
+    path: '/terms-and-conditions',
+    title: 'Terms and Conditions',
+    description: 'Terms and Conditions for using PoundToINR.co.uk, including informational-use limits and third-party provider disclaimers.',
+    eyebrow: 'Terms',
+    intro: 'The rules and limitations that apply when using this pound to INR information site.',
+    sections: [
+      ['Use of this website', 'By using PoundToINR.co.uk, you agree to use the site for lawful, informational purposes.'],
+      ['Information only', 'The content is provided for general education and should not be treated as financial, legal, tax or investment advice.'],
+    ],
+  },
+  {
+    path: '/disclaimer',
+    title: 'Disclaimer',
+    description: 'Financial and exchange-rate disclaimer for PoundToINR.co.uk. Rates are informational and not guaranteed provider quotes.',
+    eyebrow: 'Disclaimer',
+    intro: 'Important limits on pound to INR data, transfer explanations and financial information.',
+    sections: [
+      ['Currency information disclaimer', 'PoundToINR.co.uk publishes GBP to INR reference information for education. Rates shown on the site are not guaranteed transaction rates.'],
+      ['No financial advice', 'Nothing on this website is personal financial advice. Confirm important figures directly with your chosen provider before acting.'],
+    ],
+  },
+  {
+    path: '/cookie-policy',
+    title: 'Cookie Policy',
+    description: 'Cookie Policy for PoundToINR.co.uk, covering essential cookies, analytics, advertising cookies and user controls.',
+    eyebrow: 'Cookies',
+    intro: 'How cookies may be used for site operation, analytics and advertising.',
+    sections: [
+      ['What cookies are', 'Cookies are small files stored by your browser. They can help a website remember settings, measure traffic, protect forms and support advertising or analytics features.'],
+      ['Managing cookies', 'You can block or delete cookies in your browser. Some features may not remember your preferences if cookies are disabled.'],
+    ],
+  },
+];
+
+const postFiles = [
+  {
+    file: 'outputs/post-1-pound-to-inr-today/post-1-pound-to-inr-today.md',
+    path: '/news/pound-to-inr-today',
+    title: 'Pound to INR Today: Live GBP/INR Rate and Daily Update',
+    description: 'Pound to INR today with live GBP/INR rate, simple conversion examples, market drivers and transfer tips. Learn what the rate means before sending.',
+    eyebrow: 'Exchange rates',
+  },
+  {
+    file: 'outputs/post-2-gbp-to-inr-today/post-2-gbp-to-inr-today.md',
+    path: '/news/gbp-to-inr-today',
+    title: 'GBP to INR Today: Live Pound Rate in India',
+    description: 'GBP to INR today with live pound rate in India, examples, market notes and transfer checks. Learn how to read the rate before converting.',
+    eyebrow: 'Exchange rates',
+  },
+  {
+    file: 'outputs/post-3-1-pound-in-indian-rupees-today/post-3-1-pound-in-indian-rupees-today.md',
+    path: '/guides/1-pound-in-indian-rupees-today',
+    title: '1 Pound in Indian Rupees Today: Live GBP to INR Conversion',
+    description: '1 pound in Indian rupees today with live GBP to INR conversion, formula, examples and transfer checks. Learn the current value.',
+    eyebrow: 'Guides',
+  },
+];
+
+const pages = [
+  ...staticPages.map((page) => ({
+    ...page,
+    html: renderStaticSections(page),
+  })),
+  ...postFiles.map((post) => ({
+    ...post,
+    html: markdownArticleToHtml(readArticleMarkdown(post.file)),
+  })),
+];
+
+for (const page of pages) {
+  writeRouteHtml(page);
+}
+
+console.log(`SEO prerendered ${pages.length} routes.`);
+
+function writeRouteHtml(page) {
+  const canonicalUrl = `${siteUrl}${page.path}`;
+  const title = `${page.title} | ${siteName}`;
+  const schema = buildSchema(page, canonicalUrl);
+  const html = injectSeo(baseTemplate, {
+    body: renderBody(page, canonicalUrl),
+    canonicalUrl,
+    description: page.description,
+    schema,
+    title,
+  });
+  const outputDir = path.join(distDir, page.path.replace(/^\/+/, ''));
+  fs.mkdirSync(outputDir, { recursive: true });
+  fs.writeFileSync(path.join(outputDir, 'index.html'), html);
+}
+
+function injectSeo(template, { body, canonicalUrl, description, schema, title }) {
+  let html = template;
+  html = html.replace(/<title>.*?<\/title>/, `<title>${escapeHtml(title)}</title>`);
+  html = html.replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/>/, `<meta name="description" content="${escapeHtml(description)}" />`);
+  html = html.replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/, `<meta property="og:title" content="${escapeHtml(title)}" />`);
+  html = html.replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/, `<meta property="og:description" content="${escapeHtml(description)}" />`);
+  html = html.replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/, `<meta property="og:url" content="${canonicalUrl}" />`);
+  html = html.replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${escapeHtml(title)}" />`);
+  html = html.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${escapeHtml(description)}" />`);
+  html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/, `<link rel="canonical" href="${canonicalUrl}" />`);
+  html = html.replace('<div id="root"></div>', `<div id="root">${body}</div><script type="application/ld+json">${JSON.stringify(schema)}</script>`);
+  return html;
+}
+
+function renderBody(page, canonicalUrl) {
+  return [
+    '<main class="content-main seo-prerender">',
+    '<article class="content-article">',
+    `<p class="content-eyebrow">${escapeHtml(page.eyebrow)}</p>`,
+    `<h1>${escapeHtml(page.title)}</h1>`,
+    `<p class="content-intro">${escapeHtml(page.description)}</p>`,
+    page.html,
+    '</article>',
+    '<aside class="content-aside" aria-label="Related pages">',
+    '<h2>Useful pages</h2>',
+    '<a href="/gbp-to-inr">Pound to INR converter</a>',
+    '<a href="/guides">Transfer guides</a>',
+    '<a href="/news">Market notes</a>',
+    '<a href="/contact">Contact</a>',
+    '</aside>',
+    '</main>',
+    `<link rel="alternate" href="${canonicalUrl}" />`,
+  ].join('');
+}
+
+function renderStaticSections(page) {
+  return page.sections
+    .map(([heading, paragraph]) => `<section><h2>${escapeHtml(heading)}</h2><p>${escapeHtml(paragraph)}</p></section>`)
+    .join('');
+}
+
+function readArticleMarkdown(file) {
+  const source = fs.readFileSync(path.join(root, file), 'utf8');
+  const articleIndex = source.indexOf('## Article');
+  return articleIndex >= 0 ? source.slice(articleIndex + '## Article'.length) : source;
+}
+
+function markdownArticleToHtml(markdown) {
+  const lines = markdown
+    .replace(/<figure>[\s\S]*?<\/figure>/gi, '')
+    .replace(/<img\b[^>]*>/gi, '')
+    .split(/\r?\n/);
+  const out = [];
+  let paragraph = [];
+
+  const flush = () => {
+    if (!paragraph.length) return;
+    out.push(`<p>${inlineMarkdown(paragraph.join(' '))}</p>`);
+    paragraph = [];
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) {
+      flush();
+      continue;
+    }
+    if (/^#{1,4}\s+/.test(line)) {
+      flush();
+      const level = Math.min(line.match(/^#+/)?.[0].length ?? 2, 3);
+      const text = line.replace(/^#{1,4}\s+/, '');
+      out.push(`<h${level}>${inlineMarkdown(text)}</h${level}>`);
+      continue;
+    }
+    paragraph.push(line);
+  }
+  flush();
+  return out.join('');
+}
+
+function inlineMarkdown(value) {
+  return escapeHtml(value)
+    .replace(/&lt;a href=&quot;([^&]+)&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;([\s\S]*?)&lt;\/a&gt;/g, '<a href="$1" target="_blank" rel="nofollow noopener">$2</a>')
+    .replace(/&lt;a href=&quot;([^&]+)&quot;&gt;([\s\S]*?)&lt;\/a&gt;/g, '<a href="$1">$2</a>');
+}
+
+function buildSchema(page, canonicalUrl) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': page.path.startsWith('/news/') || page.path.startsWith('/guides/') ? 'Article' : 'WebPage',
+    dateModified: '2026-08-02',
+    description: page.description,
+    headline: page.title,
+    inLanguage: 'en-GB',
+    mainEntityOfPage: canonicalUrl,
+    name: page.title,
+    publisher: {
+      '@type': 'Organization',
+      email: contactEmail,
+      name: siteName,
+      url: siteUrl,
+    },
+    url: canonicalUrl,
+  };
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
