@@ -1,3 +1,15 @@
 /robots.txt /robots.txt 200
 /sitemap.xml /sitemap.xml 200
+/about /about/index.html 200
+/contact /contact/index.html 200
+/guides /guides/index.html 200
+/guides/1-pound-in-indian-rupees-today /guides/1-pound-in-indian-rupees-today/index.html 200
+/news /news/index.html 200
+/news/pound-to-inr-today /news/pound-to-inr-today/index.html 200
+/news/gbp-to-inr-today /news/gbp-to-inr-today/index.html 200
+/editorial-policy /editorial-policy/index.html 200
+/privacy-policy /privacy-policy/index.html 200
+/terms-and-conditions /terms-and-conditions/index.html 200
+/disclaimer /disclaimer/index.html 200
+/cookie-policy /cookie-policy/index.html 200
 /* /index.html 200
