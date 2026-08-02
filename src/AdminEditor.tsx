@@ -518,6 +518,40 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
     );
   };
 
+  const publishDailyPosts = async () => {
+    if (!supabase) {
+      setSavedMessage('Supabase is not configured');
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const response = await fetch('/content/daily-posts-2026-08-02.json', {
+        headers: { accept: 'application/json' },
+      });
+      if (!response.ok) throw new Error('Daily post file could not be loaded');
+      const dailyPosts = await response.json() as Array<Omit<ExistingPost, 'id' | 'published_at' | 'status' | 'updated_at'>>;
+      const publishedAt = new Date().toISOString();
+      const payload = dailyPosts.map((post) => {
+        const text = stripHtml(`${post.title} ${post.blocks.map(blockToPlainText).join(' ')}`);
+        return {
+          ...post,
+          published_at: publishedAt,
+          seo_score: 100,
+          status: 'published' as PostStatus,
+          word_count: countWords(text),
+        };
+      });
+      const { error } = await supabase.from('posts').upsert(payload, { onConflict: 'slug' });
+      if (error) throw error;
+      setSavedMessage(`Published today's ${dailyPosts.length} posts`);
+      await refreshPostList();
+    } catch (error) {
+      setSavedMessage(`Daily posts failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const captureCurrentSnapshot = async () => {
     if (!supabase) return 'Supabase is not configured';
     try {
@@ -573,6 +607,9 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
           </button>
           <button type="button" onClick={publishStarterContent} disabled={isSaving}>
             Publish real starter posts
+          </button>
+          <button type="button" onClick={publishDailyPosts} disabled={isSaving}>
+            Publish today's 2 posts
           </button>
           <button type="button" onClick={() => void onSignOut()}>
             Sign out

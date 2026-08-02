@@ -115,25 +115,41 @@ const staticPages = [
 
 const postFiles = [
   {
-    file: 'outputs/post-1-pound-to-inr-today/post-1-pound-to-inr-today.md',
+    file: 'content/posts/pound-to-inr-today.md',
     path: '/news/pound-to-inr-today',
     title: 'Pound to INR Today: Live GBP/INR Rate and Daily Update',
     description: 'Pound to INR today with live GBP/INR rate, simple conversion examples, market drivers and transfer tips. Learn what the rate means before sending.',
     eyebrow: 'Exchange rates',
   },
   {
-    file: 'outputs/post-2-gbp-to-inr-today/post-2-gbp-to-inr-today.md',
+    file: 'content/posts/gbp-to-inr-today.md',
     path: '/news/gbp-to-inr-today',
     title: 'GBP to INR Today: Live Pound Rate in India',
     description: 'GBP to INR today with live pound rate in India, examples, market notes and transfer checks. Learn how to read the rate before converting.',
     eyebrow: 'Exchange rates',
   },
   {
-    file: 'outputs/post-3-1-pound-in-indian-rupees-today/post-3-1-pound-in-indian-rupees-today.md',
+    file: 'content/posts/1-pound-in-indian-rupees-today.md',
     path: '/guides/1-pound-in-indian-rupees-today',
     title: '1 Pound in Indian Rupees Today: Live GBP to INR Conversion',
     description: '1 pound in Indian rupees today with live GBP to INR conversion, formula, examples and transfer checks. Learn the current value.',
     eyebrow: 'Guides',
+  },
+  {
+    file: 'content/posts/100-pounds-in-indian-rupees.md',
+    path: '/guides/100-pounds-in-indian-rupees',
+    title: '100 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 100 pounds in Indian rupees with the latest GBP to INR reference rate, clear formula, fee checks and practical examples. Calculate now.',
+    eyebrow: 'Guides',
+    image: '/images/100-pounds-in-indian-rupees.webp',
+  },
+  {
+    file: 'content/posts/1000-pounds-in-indian-rupees.md',
+    path: '/guides/1000-pounds-in-indian-rupees',
+    title: '1000 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 1000 pounds in Indian rupees with the latest GBP to INR reference rate, fee examples and transfer checks. See the calculation and compare costs.',
+    eyebrow: 'Guides',
+    image: '/images/1000-pounds-in-indian-rupees.webp',
   },
 ];
 
@@ -164,19 +180,23 @@ function writeRouteHtml(page) {
     description: page.description,
     schema,
     title,
+    image: page.image ? `${siteUrl}${page.image}` : '',
   });
   const outputDir = path.join(distDir, page.path.replace(/^\/+/, ''));
   fs.mkdirSync(outputDir, { recursive: true });
   fs.writeFileSync(path.join(outputDir, 'index.html'), html);
 }
 
-function injectSeo(template, { body, canonicalUrl, description, schema, title }) {
+function injectSeo(template, { body, canonicalUrl, description, image, schema, title }) {
   let html = template;
   html = html.replace(/<title>.*?<\/title>/, `<title>${escapeHtml(title)}</title>`);
   html = html.replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/>/, `<meta name="description" content="${escapeHtml(description)}" />`);
   html = html.replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/, `<meta property="og:title" content="${escapeHtml(title)}" />`);
   html = html.replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/, `<meta property="og:description" content="${escapeHtml(description)}" />`);
   html = html.replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/, `<meta property="og:url" content="${canonicalUrl}" />`);
+  if (image) {
+    html = html.replace('<meta name="twitter:card" content="summary_large_image" />', `<meta property="og:image" content="${image}" /><meta name="twitter:image" content="${image}" /><meta name="twitter:card" content="summary_large_image" />`);
+  }
   html = html.replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${escapeHtml(title)}" />`);
   html = html.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${escapeHtml(description)}" />`);
   html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/, `<link rel="canonical" href="${canonicalUrl}" />`);
@@ -241,6 +261,7 @@ function markdownArticleToHtml(markdown) {
       flush();
       const level = Math.min(line.match(/^#+/)?.[0].length ?? 2, 3);
       const text = line.replace(/^#{1,4}\s+/, '');
+      if (level === 1) continue;
       out.push(`<h${level}>${inlineMarkdown(text)}</h${level}>`);
       continue;
     }
@@ -253,7 +274,8 @@ function markdownArticleToHtml(markdown) {
 function inlineMarkdown(value) {
   return escapeHtml(value)
     .replace(/&lt;a href=&quot;([^&]+)&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;([\s\S]*?)&lt;\/a&gt;/g, '<a href="$1" target="_blank" rel="nofollow noopener">$2</a>')
-    .replace(/&lt;a href=&quot;([^&]+)&quot;&gt;([\s\S]*?)&lt;\/a&gt;/g, '<a href="$1">$2</a>');
+    .replace(/&lt;a href=&quot;([^&]+)&quot;&gt;([\s\S]*?)&lt;\/a&gt;/g, '<a href="$1">$2</a>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 }
 
 function buildSchema(page, canonicalUrl) {
@@ -263,6 +285,7 @@ function buildSchema(page, canonicalUrl) {
     dateModified: '2026-08-02',
     description: page.description,
     headline: page.title,
+    ...(page.image ? { image: `${siteUrl}${page.image}` } : {}),
     inLanguage: 'en-GB',
     mainEntityOfPage: canonicalUrl,
     name: page.title,
