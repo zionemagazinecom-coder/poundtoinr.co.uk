@@ -4,7 +4,7 @@ import { AdminAuthGate, AdminAuthPage } from './AdminAuthGate';
 import { AdminEditor } from './AdminEditor';
 import { CookieConsent } from './components/CookieConsent';
 import { Converter } from './components/Converter';
-import { SeoRoutePage, buildHomeSchema, homeSeo, seoPages, usePageSeo } from './SeoContent';
+import { SeoRoutePage, SiteFooter, buildHomeSchema, homeSeo, seoPages, usePageSeo } from './SeoContent';
 import { exchangeRateProvider, type NormalisedRate } from './lib/exchangeRateProvider';
 import { getPublishedPostBySlug, getPublishedPosts, getRealRateSnapshots, type PublishedPost, type PublishedPostBlock, type RateSnapshot } from './lib/liveContent';
 
@@ -425,13 +425,7 @@ function PostRoutePage({ path }: { path: string }) {
           <a href="/contact">Contact</a>
         </aside>
       </main>
-      <footer className="footer">
-        <div>
-          <a className="footer-brand" href="/">Pound<em>ToINR</em></a>
-          <p>Independent GBP to INR exchange rate data, transfer research and plain-English finance explainers for people moving money between Britain and India.</p>
-          <small>Mid-market reference rates are informational only. We are not a money-transfer provider and do not hold client funds.</small>
-        </div>
-      </footer>
+      <SiteFooter />
       <CookieConsent />
     </div>
   );

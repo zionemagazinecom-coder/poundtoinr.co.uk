@@ -237,7 +237,23 @@ function renderBody(page, canonicalUrl) {
     '<a href="/contact">Contact</a>',
     '</aside>',
     '</main>',
+    renderFooter(),
     `<link rel="alternate" href="${canonicalUrl}" />`,
+  ].join('');
+}
+
+function renderFooter() {
+  return [
+    '<footer class="footer">',
+    '<div>',
+    '<a class="footer-brand" href="/">Pound<em>ToINR</em></a>',
+    '<p>Independent pound to INR exchange rate data, GBP/INR research and plain-English finance explainers for people moving money between Britain and India.</p>',
+    '<small>Mid-market reference rates are informational only. We are not a money-transfer provider and do not hold client funds.</small>',
+    '</div>',
+    '<div><h3>Convert</h3><a href="/gbp-to-inr">Pound to INR converter</a><a href="/guides">Currency &amp; transfer guides</a><a href="/news">Exchange rate news</a></div>',
+    '<div><h3>Company</h3><a href="/about">About us</a><a href="/contact">Contact</a><a href="/editorial-policy">Editorial policy</a></div>',
+    '<div><h3>Legal</h3><a href="/privacy-policy">Privacy policy</a><a href="/terms-and-conditions">Terms &amp; conditions</a><a href="/disclaimer">Disclaimer</a><a href="/cookie-policy">Cookie policy</a></div>',
+    '</footer>',
   ].join('');
 }
 
