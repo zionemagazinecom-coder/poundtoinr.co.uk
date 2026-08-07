@@ -52,7 +52,10 @@ type BundledPostRow = {
   title: string;
 };
 
-const bundledPostsUrl = '/content/daily-posts-2026-08-02.json';
+const bundledPostFeeds = [
+  { publishedAt: '2026-08-07T00:00:00.000Z', url: '/content/daily-posts-2026-08-07.json' },
+  { publishedAt: '2026-08-02T00:00:00.000Z', url: '/content/daily-posts-2026-08-02.json' },
+];
 
 export async function getPublishedPosts(limit = 12): Promise<PublishedPost[]> {
   const bundledPosts = await getBundledPosts();
@@ -109,19 +112,22 @@ export async function getPublishedPostBySlug(slug: string): Promise<PublishedPos
 
 async function getBundledPosts(): Promise<PublishedPost[]> {
   try {
-    const response = await fetch(bundledPostsUrl, { headers: { accept: 'application/json' } });
-    if (!response.ok) return [];
-    const rows = await response.json() as BundledPostRow[];
-    return rows.map((post) => ({
-      blocks: post.blocks,
-      categories: post.categories,
-      createdAt: '2026-08-02T00:00:00.000Z',
-      excerpt: post.excerpt,
-      featuredImageUrl: post.featured_image_url,
-      publishedAt: '2026-08-02T00:00:00.000Z',
-      slug: post.slug,
-      title: post.title,
+    const feeds = await Promise.all(bundledPostFeeds.map(async (feed) => {
+      const response = await fetch(feed.url, { headers: { accept: 'application/json' } });
+      if (!response.ok) return [];
+      const rows = await response.json() as BundledPostRow[];
+      return rows.map((post) => ({
+        blocks: post.blocks,
+        categories: post.categories,
+        createdAt: feed.publishedAt,
+        excerpt: post.excerpt,
+        featuredImageUrl: post.featured_image_url,
+        publishedAt: feed.publishedAt,
+        slug: post.slug,
+        title: post.title,
+      }));
     }));
+    return feeds.flat();
   } catch {
     return [];
   }

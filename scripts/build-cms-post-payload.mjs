@@ -51,6 +51,6 @@ const payload = {
   external_links: links('External link'),
 };
 
-const outputPath = path.join(path.dirname(inputPath), 'post-cms-payload.json');
+const outputPath = process.argv[3] ?? path.join(path.dirname(inputPath), 'post-cms-payload.json');
 fs.writeFileSync(outputPath, `${JSON.stringify(payload, null, 2)}\n`);
 console.log(outputPath);

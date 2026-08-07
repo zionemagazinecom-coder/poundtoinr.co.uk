@@ -151,6 +151,22 @@ const postFiles = [
     eyebrow: 'Guides',
     image: '/images/1000-pounds-in-indian-rupees.webp',
   },
+  {
+    file: 'content/posts/500-pounds-in-indian-rupees.md',
+    path: '/guides/500-pounds-in-indian-rupees',
+    title: '500 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 500 pounds in Indian rupees using the latest reference rate, practical examples and clear fee checks. See the live GBP to INR value now.',
+    eyebrow: 'Guides',
+    image: '/images/500-pounds-in-indian-rupees.webp',
+  },
+  {
+    file: 'content/posts/2000-pounds-in-indian-rupees.md',
+    path: '/guides/2000-pounds-in-indian-rupees',
+    title: '2000 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 2000 pounds in Indian rupees with the latest reference rate, fee examples and transfer checks. Calculate the live GBP to INR value now.',
+    eyebrow: 'Guides',
+    image: '/images/2000-pounds-in-indian-rupees.webp',
+  },
 ];
 
 const pages = [

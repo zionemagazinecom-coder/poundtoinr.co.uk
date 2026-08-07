@@ -525,7 +525,7 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
     }
     setIsSaving(true);
     try {
-      const response = await fetch('/content/daily-posts-2026-08-02.json', {
+      const response = await fetch('/content/daily-posts-2026-08-07.json', {
         headers: { accept: 'application/json' },
       });
       if (!response.ok) throw new Error('Daily post file could not be loaded');
@@ -609,7 +609,7 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
             Publish real starter posts
           </button>
           <button type="button" onClick={publishDailyPosts} disabled={isSaving}>
-            Publish today's 2 posts
+            Publish latest 2 posts
           </button>
           <button type="button" onClick={() => void onSignOut()}>
             Sign out
