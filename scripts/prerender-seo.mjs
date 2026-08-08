@@ -167,6 +167,22 @@ const postFiles = [
     eyebrow: 'Guides',
     image: '/images/2000-pounds-in-indian-rupees.webp',
   },
+  {
+    file: 'content/posts/5000-pounds-in-indian-rupees.md',
+    path: '/guides/5000-pounds-in-indian-rupees',
+    title: '5000 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 5000 pounds in Indian rupees with the latest reference rate, fee examples and transfer checks. Calculate the live GBP to INR value now.',
+    eyebrow: 'Guides',
+    image: '/images/5000-pounds-in-indian-rupees.webp',
+  },
+  {
+    file: 'content/posts/10000-pounds-in-indian-rupees.md',
+    path: '/guides/10000-pounds-in-indian-rupees',
+    title: '10000 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 10000 pounds in Indian rupees with the latest reference rate, fee examples and large-transfer checks. See the live GBP to INR value.',
+    eyebrow: 'Guides',
+    image: '/images/10000-pounds-in-indian-rupees.webp',
+  },
 ];
 
 const pages = [
@@ -314,7 +330,7 @@ function buildSchema(page, canonicalUrl) {
   return {
     '@context': 'https://schema.org',
     '@type': page.path.startsWith('/news/') || page.path.startsWith('/guides/') ? 'Article' : 'WebPage',
-    dateModified: '2026-08-02',
+    dateModified: page.path.includes('5000-pounds') || page.path.includes('10000-pounds') ? '2026-08-08' : '2026-08-02',
     description: page.description,
     headline: page.title,
     ...(page.image ? { image: `${siteUrl}${page.image}` } : {}),
