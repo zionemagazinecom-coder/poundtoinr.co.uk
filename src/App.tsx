@@ -4,6 +4,7 @@ import { AdminAuthGate, AdminAuthPage } from './AdminAuthGate';
 import { AdminEditor } from './AdminEditor';
 import { CookieConsent } from './components/CookieConsent';
 import { Converter } from './components/Converter';
+import { ReverseConverter } from './components/ReverseConverter';
 import { SeoRoutePage, SiteFooter, buildHomeSchema, homeSeo, seoPages, usePageSeo } from './SeoContent';
 import { exchangeRateProvider, type NormalisedRate } from './lib/exchangeRateProvider';
 import { getPublishedPostBySlug, getPublishedPosts, getRealRateSnapshots, type PublishedPost, type PublishedPostBlock, type RateSnapshot } from './lib/liveContent';
@@ -407,6 +408,7 @@ function PostRoutePage({ path }: { path: string }) {
               <p className="content-intro">{post.excerpt}</p>
               <p className="content-updated">Last updated: {formatDate(post.publishedAt ?? post.createdAt)}</p>
               {post.featuredImageUrl ? <img className="post-featured-image" src={post.featuredImageUrl} alt="" /> : null}
+              {isReverseConverterPost(slug) ? <ReverseConverter /> : null}
               {(post.blocks ?? []).map((block) => renderPostBlock(block))}
             </>
           ) : (
@@ -527,6 +529,10 @@ function sanitizeHtml(input: string) {
 function isGuidePost(post: PublishedPost) {
   const tags = post.categories.map((category) => category.toLowerCase());
   return tags.some((tag) => tag.includes('guide') || tag.includes('transfer') || tag.includes('nri'));
+}
+
+function isReverseConverterPost(slug: string) {
+  return slug === '1-lakh-in-pounds' || slug === 'inr-to-gbp-converter';
 }
 
 function isMarketPost(post: PublishedPost) {

@@ -183,6 +183,24 @@ const postFiles = [
     eyebrow: 'Guides',
     image: '/images/10000-pounds-in-indian-rupees.webp',
   },
+  {
+    file: 'content/posts/1-lakh-in-pounds.md',
+    path: '/guides/1-lakh-in-pounds',
+    title: '1 Lakh in Pounds: Live INR to GBP Conversion',
+    description: 'Convert 1 lakh in pounds with the latest INR to GBP reference rate, clear formula and fee examples. Check how much ₹1,00,000 is worth now.',
+    eyebrow: 'Reverse conversion',
+    image: '/images/1-lakh-in-pounds.webp',
+    tool: 'reverse-converter',
+  },
+  {
+    file: 'content/posts/inr-to-gbp-converter.md',
+    path: '/guides/inr-to-gbp-converter',
+    title: 'INR to GBP Converter: Indian Rupees to Pounds',
+    description: 'Use the live INR to GBP converter to turn Indian rupees into British pounds. Check the formula, current reference rate, examples and provider costs.',
+    eyebrow: 'Reverse conversion',
+    image: '/images/inr-to-gbp-converter.webp',
+    tool: 'reverse-converter',
+  },
 ];
 
 const pages = [
@@ -243,6 +261,7 @@ function renderBody(page, canonicalUrl) {
     `<p class="content-eyebrow">${escapeHtml(page.eyebrow)}</p>`,
     `<h1>${escapeHtml(page.title)}</h1>`,
     `<p class="content-intro">${escapeHtml(page.description)}</p>`,
+    page.tool === 'reverse-converter' ? renderReverseConverter() : '',
     page.html,
     '</article>',
     '<aside class="content-aside" aria-label="Related pages">',
@@ -255,6 +274,20 @@ function renderBody(page, canonicalUrl) {
     '</main>',
     renderFooter(),
     `<link rel="alternate" href="${canonicalUrl}" />`,
+  ].join('');
+}
+
+function renderReverseConverter() {
+  return [
+    '<section class="reverse-converter" aria-labelledby="reverse-converter-title">',
+    '<div class="reverse-converter__head"><div><span>Live reference tool</span><h2 id="reverse-converter-title">INR to GBP converter</h2></div><strong>Loading</strong></div>',
+    '<div class="reverse-converter__fields">',
+    '<label><span>Indian rupees</span><div><b>₹</b><input aria-label="Indian rupee amount" inputmode="decimal" min="0" type="number" value="100000" /><em>INR</em></div></label>',
+    '<span aria-hidden="true">→</span>',
+    '<label><span>British pounds</span><div><b>£</b><input aria-label="British pound result" readonly value="779.71" /><em>GBP</em></div></label>',
+    '</div>',
+    '<p class="reverse-converter__rate">Reference example: 1 INR = <strong>0.007797 GBP</strong><span>Live result loads in the browser. Provider quotes may differ.</span></p>',
+    '</section>',
   ].join('');
 }
 
@@ -330,7 +363,7 @@ function buildSchema(page, canonicalUrl) {
   return {
     '@context': 'https://schema.org',
     '@type': page.path.startsWith('/news/') || page.path.startsWith('/guides/') ? 'Article' : 'WebPage',
-    dateModified: page.path.includes('5000-pounds') || page.path.includes('10000-pounds') ? '2026-08-08' : '2026-08-02',
+    dateModified: page.path.includes('1-lakh-in-pounds') || page.path.includes('inr-to-gbp-converter') ? '2026-08-09' : page.path.includes('5000-pounds') || page.path.includes('10000-pounds') ? '2026-08-08' : '2026-08-02',
     description: page.description,
     headline: page.title,
     ...(page.image ? { image: `${siteUrl}${page.image}` } : {}),
