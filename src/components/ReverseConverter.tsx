@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { convertCurrency } from '../lib/conversion';
+import { convertFromQuoteCurrency } from '../lib/conversion';
 import { exchangeRateProvider, type NormalisedRate } from '../lib/exchangeRateProvider';
 
 const quickAmounts = [10000, 50000, 100000, 500000, 1000000];
@@ -13,7 +13,7 @@ export function ReverseConverter() {
   useEffect(() => {
     let active = true;
     exchangeRateProvider
-      .getCurrentRate('INR', 'GBP')
+      .getCurrentRate('GBP', 'INR')
       .then((nextRate) => {
         if (active) setRate(nextRate);
       })
@@ -28,7 +28,7 @@ export function ReverseConverter() {
   const result = useMemo(() => {
     if (!rate) return null;
     try {
-      return convertCurrency(amount, rate).convertedAmount;
+      return convertFromQuoteCurrency(amount, rate);
     } catch {
       return null;
     }
@@ -57,7 +57,7 @@ export function ReverseConverter() {
       {error ? <p className="converter-error">{error}</p> : null}
       {rate ? (
         <p className="reverse-converter__rate">
-          1 INR = <strong>{rate.rate.toFixed(6)} GBP</strong>
+          1 INR = <strong>{(1 / rate.rate).toFixed(6)} GBP</strong>
           <span>Updated {formatDateTime(rate.fetchedAt)}. Reference rate only; provider quotes may differ.</span>
         </p>
       ) : null}

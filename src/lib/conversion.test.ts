@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { calculateExchangeRateMarkup, calculateTravelBudget } from './calculators';
-import { buildConversionTable, convertCurrency, formatCurrency, isStaleRate } from './conversion';
+import { buildConversionTable, convertCurrency, convertFromQuoteCurrency, formatCurrency, isStaleRate } from './conversion';
 import type { NormalisedRate } from './exchangeRateProvider';
 
 const rate: NormalisedRate = {
@@ -20,6 +20,10 @@ describe('currency conversion', () => {
 
   it('calculates reverse rate', () => {
     expect(convertCurrency(1, rate).reverseRate).toBe(0.01);
+  });
+
+  it('converts INR back to GBP from the canonical GBP to INR rate', () => {
+    expect(convertFromQuoteCurrency(100000, { ...rate, rate: 128.2535 })).toBeCloseTo(779.7058, 4);
   });
 
   it('rejects zero and negative amounts', () => {

@@ -27,6 +27,14 @@ export function convertCurrency(amount: number, rate: NormalisedRate): Conversio
   };
 }
 
+export function convertFromQuoteCurrency(amount: number, forwardRate: NormalisedRate): number {
+  assertValidAmount(amount);
+  if (!Number.isFinite(forwardRate.rate) || forwardRate.rate <= 0) {
+    throw new Error('The exchange rate is unavailable.');
+  }
+  return amount / forwardRate.rate;
+}
+
 export function formatCurrency(amount: number, code: CurrencyCode, precision = 2): string {
   return new Intl.NumberFormat(code === 'INR' ? 'en-IN' : 'en-GB', {
     style: 'currency',
