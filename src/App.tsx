@@ -408,6 +408,7 @@ function PostRoutePage({ path }: { path: string }) {
               <p className="content-intro">{post.excerpt}</p>
               <p className="content-updated">Last updated: {formatDate(post.publishedAt ?? post.createdAt)}</p>
               {post.featuredImageUrl ? <img className="post-featured-image" src={post.featuredImageUrl} alt="" /> : null}
+              {isForwardCalculatorPost(slug) ? <Converter /> : null}
               {isReverseConverterPost(slug) ? <ReverseConverter /> : null}
               {(post.blocks ?? []).map((block) => renderPostBlock(block))}
             </>
@@ -533,6 +534,10 @@ function isGuidePost(post: PublishedPost) {
 
 function isReverseConverterPost(slug: string) {
   return slug === '1-lakh-in-pounds' || slug === 'inr-to-gbp-converter';
+}
+
+function isForwardCalculatorPost(slug: string) {
+  return slug === 'pound-to-rupee-calculator' || slug === 'gbp-to-inr-calculator';
 }
 
 function isMarketPost(post: PublishedPost) {
