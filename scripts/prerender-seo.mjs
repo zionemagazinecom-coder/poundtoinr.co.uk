@@ -219,6 +219,22 @@ const postFiles = [
     image: '/images/gbp-to-inr-calculator.webp',
     tool: 'forward-converter',
   },
+  {
+    file: 'content/posts/pound-to-inr-historical-chart.md',
+    path: '/guides/pound-to-inr-historical-chart',
+    title: 'Pound to INR Historical Chart: How to Read GBP/INR Moves',
+    description: 'Learn how to read a pound to INR historical chart, compare real rate points and avoid misleading trends when GBP/INR history is incomplete or limited.',
+    eyebrow: 'History',
+    image: '/images/pound-to-inr-historical-chart.webp',
+  },
+  {
+    file: 'content/posts/gbp-inr-history.md',
+    path: '/guides/gbp-inr-history',
+    title: 'GBP INR History: Recent Pound to Rupee Rate Moves',
+    description: 'Explore GBP INR history responsibly, compare dated pound-to-rupee rates and learn how data coverage, fees and market events affect conclusions.',
+    eyebrow: 'History',
+    image: '/images/gbp-inr-history.webp',
+  },
 ];
 
 const pages = [
@@ -395,7 +411,7 @@ function buildSchema(page, canonicalUrl) {
   return {
     '@context': 'https://schema.org',
     '@type': page.path.startsWith('/news/') || page.path.startsWith('/guides/') ? 'Article' : 'WebPage',
-    dateModified: page.path.includes('pound-to-rupee-calculator') || page.path.includes('gbp-to-inr-calculator') ? '2026-08-10' : page.path.includes('1-lakh-in-pounds') || page.path.includes('inr-to-gbp-converter') ? '2026-08-09' : page.path.includes('5000-pounds') || page.path.includes('10000-pounds') ? '2026-08-08' : '2026-08-02',
+    dateModified: page.path.includes('pound-to-inr-historical-chart') || page.path.includes('gbp-inr-history') ? '2026-08-13' : page.path.includes('pound-to-rupee-calculator') || page.path.includes('gbp-to-inr-calculator') ? '2026-08-10' : page.path.includes('1-lakh-in-pounds') || page.path.includes('inr-to-gbp-converter') ? '2026-08-09' : page.path.includes('5000-pounds') || page.path.includes('10000-pounds') ? '2026-08-08' : '2026-08-02',
     description: page.description,
     headline: page.title,
     ...(page.image ? { image: `${siteUrl}${page.image}` } : {}),

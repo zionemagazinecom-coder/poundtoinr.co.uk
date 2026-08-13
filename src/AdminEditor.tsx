@@ -525,7 +525,7 @@ export function AdminEditor({ adminEmail, adminRole, onSignOut }: AdminEditorPro
     }
     setIsSaving(true);
     try {
-      const response = await fetch('/content/daily-posts-2026-08-10.json', {
+      const response = await fetch('/content/daily-posts-2026-08-13.json', {
         headers: { accept: 'application/json' },
       });
       if (!response.ok) throw new Error('Daily post file could not be loaded');
