@@ -235,6 +235,22 @@ const postFiles = [
     eyebrow: 'History',
     image: '/images/gbp-inr-history.webp',
   },
+  {
+    file: 'content/posts/pound-to-inr-forecast.md',
+    path: '/guides/pound-to-inr-forecast',
+    title: 'Pound to INR Forecast: What Can Move GBP/INR Next',
+    description: 'Read a balanced pound to INR forecast with upside, base and downside scenarios, key GBP/INR drivers and practical checks before converting money.',
+    eyebrow: 'Forecast',
+    image: '/images/pound-to-inr-forecast.webp',
+  },
+  {
+    file: 'content/posts/gbp-to-inr-forecast-this-week.md',
+    path: '/news/gbp-to-inr-forecast-this-week',
+    title: 'GBP to INR Forecast This Week: Key Events to Watch',
+    description: 'Follow the GBP to INR forecast this week with the 17–23 August 2026 event calendar, balanced scenarios and practical transfer-rate checks now.',
+    eyebrow: 'Weekly outlook',
+    image: '/images/gbp-to-inr-forecast-this-week.webp',
+  },
 ];
 
 const pages = [
@@ -411,7 +427,7 @@ function buildSchema(page, canonicalUrl) {
   return {
     '@context': 'https://schema.org',
     '@type': page.path.startsWith('/news/') || page.path.startsWith('/guides/') ? 'Article' : 'WebPage',
-    dateModified: page.path.includes('pound-to-inr-historical-chart') || page.path.includes('gbp-inr-history') ? '2026-08-13' : page.path.includes('pound-to-rupee-calculator') || page.path.includes('gbp-to-inr-calculator') ? '2026-08-10' : page.path.includes('1-lakh-in-pounds') || page.path.includes('inr-to-gbp-converter') ? '2026-08-09' : page.path.includes('5000-pounds') || page.path.includes('10000-pounds') ? '2026-08-08' : '2026-08-02',
+    dateModified: page.path.includes('pound-to-inr-forecast') || page.path.includes('gbp-to-inr-forecast-this-week') ? '2026-08-15' : page.path.includes('pound-to-inr-historical-chart') || page.path.includes('gbp-inr-history') ? '2026-08-13' : page.path.includes('pound-to-rupee-calculator') || page.path.includes('gbp-to-inr-calculator') ? '2026-08-10' : page.path.includes('1-lakh-in-pounds') || page.path.includes('inr-to-gbp-converter') ? '2026-08-09' : page.path.includes('5000-pounds') || page.path.includes('10000-pounds') ? '2026-08-08' : '2026-08-02',
     description: page.description,
     headline: page.title,
     ...(page.image ? { image: `${siteUrl}${page.image}` } : {}),

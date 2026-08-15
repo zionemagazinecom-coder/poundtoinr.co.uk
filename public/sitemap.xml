@@ -133,6 +133,18 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://poundtoinr.co.uk/guides/pound-to-inr-forecast</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://poundtoinr.co.uk/news/gbp-to-inr-forecast-this-week</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
     <loc>https://poundtoinr.co.uk/news/gbp-to-inr-live-rate-source-policy</loc>
     <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
