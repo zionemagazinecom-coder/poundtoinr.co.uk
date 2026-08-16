@@ -60,6 +60,7 @@ const bundledPostFeeds = [
   { publishedAt: '2026-08-08T00:00:00.000Z', url: '/content/daily-posts-2026-08-08.json' },
   { publishedAt: '2026-08-07T00:00:00.000Z', url: '/content/daily-posts-2026-08-07.json' },
   { publishedAt: '2026-08-02T00:00:00.000Z', url: '/content/daily-posts-2026-08-02.json' },
+  { publishedAt: '2026-07-26T00:00:00.000Z', url: '/content/daily-posts-2026-07-26.json' },
 ];
 
 export async function getPublishedPosts(limit = 12): Promise<PublishedPost[]> {

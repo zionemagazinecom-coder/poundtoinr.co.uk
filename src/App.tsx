@@ -119,11 +119,11 @@ function PublicApp({ path }: { path: string }) {
             <strong>Pound<em>ToINR</em></strong>
           </a>
           <div className="nav-links">
-            <a className="active" href="/gbp-to-inr">Converter</a>
-            <a href="/guides">Guides</a>
-            <a href="/news">News</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
+            <a className="active" href="/gbp-to-inr/">Converter</a>
+            <a href="/guides/">Guides</a>
+            <a href="/news/">News</a>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
           </div>
           <a className="nav-cta" href="#converter">Convert now</a>
         </nav>
@@ -267,7 +267,7 @@ function PublicApp({ path }: { path: string }) {
                 <span>{post.categories[0] ?? 'Guide'}</span>
                 <h3>{post.title}</h3>
                 <p>{post.excerpt || 'Published from the CMS.'}</p>
-                <a href={`/guides/${post.slug}`}>Read the guide <b>{'->'}</b></a>
+                <a href={`/guides/${post.slug}/`}>Read the guide <b>{'->'}</b></a>
               </article>
             )) : <EmptyContentCard message="No published guide posts yet. Publish from /admin and they will appear here." />}
           </div>
@@ -276,7 +276,7 @@ function PublicApp({ path }: { path: string }) {
         <section className="notes-section">
           <div className="notes-title">
             <h2>What's moving the rate</h2>
-            <a href="/news">All market notes {'->'}</a>
+            <a href="/news/">All market notes {'->'}</a>
           </div>
           <div className="notes-grid">
             {marketPosts.length ? marketPosts.map((post) => (
@@ -284,7 +284,7 @@ function PublicApp({ path }: { path: string }) {
                 <span>{post.publishedAt ? formatDate(post.publishedAt) : 'Published'}</span>
                 <h3>{post.title}</h3>
                 <p>{post.excerpt || 'Published from the CMS.'}</p>
-                <a href={`/news/${post.slug}`}>Read note <b>{'->'}</b></a>
+                <a href={`/news/${post.slug}/`}>Read note <b>{'->'}</b></a>
               </article>
             )) : <EmptyContentCard message="No published market notes yet. Static market notes are disabled." />}
           </div>
@@ -330,22 +330,22 @@ function PublicApp({ path }: { path: string }) {
         </div>
         <div>
           <h3>Convert</h3>
-          <a href="/gbp-to-inr">Pound to INR converter</a>
-          <a href="/guides">Currency & transfer guides</a>
-          <a href="/news">Exchange rate news</a>
+          <a href="/gbp-to-inr/">Pound to INR converter</a>
+          <a href="/guides/">Currency & transfer guides</a>
+          <a href="/news/">Exchange rate news</a>
         </div>
         <div>
           <h3>Company</h3>
-          <a href="/about">About us</a>
-          <a href="/contact">Contact</a>
-          <a href="/editorial-policy">Editorial policy</a>
+          <a href="/about/">About us</a>
+          <a href="/contact/">Contact</a>
+          <a href="/editorial-policy/">Editorial policy</a>
         </div>
         <div>
           <h3>Legal</h3>
-          <a href="/privacy-policy">Privacy policy</a>
-          <a href="/terms-and-conditions">Terms & conditions</a>
-          <a href="/disclaimer">Disclaimer</a>
-          <a href="/cookie-policy">Cookie policy</a>
+          <a href="/privacy-policy/">Privacy policy</a>
+          <a href="/terms-and-conditions/">Terms & conditions</a>
+          <a href="/disclaimer/">Disclaimer</a>
+          <a href="/cookie-policy/">Cookie policy</a>
         </div>
       </footer>
       <CookieConsent />
@@ -388,11 +388,11 @@ function PostRoutePage({ path }: { path: string }) {
             <strong>Pound<em>ToINR</em></strong>
           </a>
           <div className="nav-links">
-            <a href="/gbp-to-inr">Converter</a>
-            <a href="/guides">Guides</a>
-            <a href="/news">News</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
+            <a href="/gbp-to-inr/">Converter</a>
+            <a href="/guides/">Guides</a>
+            <a href="/news/">News</a>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
           </div>
           <a className="nav-cta" href="/#converter">Convert now</a>
         </nav>
@@ -422,10 +422,10 @@ function PostRoutePage({ path }: { path: string }) {
         </article>
         <aside className="content-aside" aria-label="Related pages">
           <h2>Useful pages</h2>
-          <a href="/gbp-to-inr">GBP to INR converter</a>
-          <a href="/guides">Transfer guides</a>
-          <a href="/news">Market notes</a>
-          <a href="/contact">Contact</a>
+          <a href="/gbp-to-inr/">GBP to INR converter</a>
+          <a href="/guides/">Transfer guides</a>
+          <a href="/news/">Market notes</a>
+          <a href="/contact/">Contact</a>
         </aside>
       </main>
       <SiteFooter />
@@ -467,14 +467,14 @@ function buildPostSchema(post: PublishedPost, path: string) {
     description: post.excerpt,
     headline: post.title,
     inLanguage: 'en-GB',
-    mainEntityOfPage: `https://poundtoinr.co.uk${path}`,
+    mainEntityOfPage: `https://poundtoinr.co.uk${path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`}`,
     publisher: {
       '@type': 'Organization',
       email: 'zionemagazine.com@gmail.com',
       name: 'PoundToINR.co.uk',
       url: 'https://poundtoinr.co.uk',
     },
-    url: `https://poundtoinr.co.uk${path}`,
+    url: `https://poundtoinr.co.uk${path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`}`,
   };
 }
 
@@ -513,6 +513,11 @@ function sanitizeHtml(input: string) {
           if (/^https?:\/\//i.test(href)) {
             element.setAttribute('target', '_blank');
             element.setAttribute('rel', 'nofollow noopener');
+          } else if (/^\/(?!\/|#)/.test(href)) {
+            const [route, suffix = ''] = href.split(/(?=[?#])/u, 2);
+            if (route !== '/' && !/\.[a-z0-9]+$/i.test(route)) {
+              element.setAttribute('href', `${route.replace(/\/+$/, '')}/${suffix}`);
+            }
           }
         }
         if (element.tagName === 'IMG' && /^javascript:/i.test(element.getAttribute('src') ?? '')) {

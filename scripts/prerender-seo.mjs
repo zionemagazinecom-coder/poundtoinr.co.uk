@@ -12,6 +12,18 @@ const baseTemplate = fs.readFileSync(templatePath, 'utf8');
 
 const staticPages = [
   {
+    path: '/gbp-to-inr',
+    title: 'Pound to INR Converter and Live GBP/INR Rate',
+    description: 'Convert pound to INR with the latest GBP/INR reference rate, clear calculations and practical guidance for comparing UK to India transfer quotes.',
+    eyebrow: 'Live converter',
+    intro: 'Convert British pounds to Indian rupees using the latest available reference rate.',
+    tool: 'forward-converter',
+    sections: [
+      ['How to use the converter', 'Enter a pound amount to estimate its value in Indian rupees. The live result is a reference calculation, so compare it with the final rupee amount offered by a bank or transfer provider.'],
+      ['Why provider quotes differ', 'Banks and transfer services may include an exchange-rate margin, transfer fee, payment-method charge or receiving fee. Compare the complete quote before sending money.'],
+    ],
+  },
+  {
     path: '/about',
     title: 'About PoundToINR.co.uk',
     description: 'Learn about PoundToINR.co.uk, an independent pound to INR exchange-rate and money-transfer information site for UK and India readers.',
@@ -109,6 +121,72 @@ const staticPages = [
     sections: [
       ['What cookies are', 'Cookies are small files stored by your browser. They can help a website remember settings, measure traffic, protect forms and support advertising or analytics features.'],
       ['Managing cookies', 'You can block or delete cookies in your browser. Some features may not remember your preferences if cookies are disabled.'],
+    ],
+  },
+  {
+    path: '/guides/compare-gbp-to-inr-transfer-quotes',
+    title: 'How to Compare GBP to INR Transfer Quotes',
+    description: 'Learn how to compare a GBP to INR transfer quote with the live reference rate, visible fees and provider margins before sending money.',
+    eyebrow: 'Money transfer guide',
+    intro: 'A practical checklist for comparing pound to INR transfer quotes.',
+    sections: [
+      ['Start with the live reference rate', 'Use the pound to INR converter as a benchmark before comparing a bank, app or money-transfer quote.'],
+      ['Compare the final INR amount', 'A provider may include a margin inside its exchange rate as well as a visible fee. Compare how many rupees arrive for the same pound amount, speed and payment method.'],
+    ],
+  },
+  {
+    path: '/guides/nri-banking-checklist-gbp-to-inr',
+    title: 'NRI Banking Checklist for GBP to INR Transfers',
+    description: 'Check account type, purpose code and documentation before sending pound to INR transfers into an Indian bank account.',
+    eyebrow: 'NRI banking guide',
+    intro: 'A plain-English receiving-account checklist for sending pounds to India.',
+    sections: [
+      ['Use the right receiving account', 'Confirm whether the Indian account is suitable for overseas income, local income or family support before sending money.'],
+      ['Check transfer requirements', 'For a large transfer, confirm the account type, purpose code, documentation and repatriation rules with the receiving bank or a qualified adviser.'],
+    ],
+  },
+  {
+    path: '/guides/why-gbp-to-inr-provider-rates-differ',
+    title: 'Why GBP to INR Provider Rates Differ',
+    description: 'Understand why pound to INR provider quotes differ from the live reference rate and how to compare the final rupee amount.',
+    eyebrow: 'Exchange-rate guide',
+    intro: 'Why a bank or transfer app can show a different pound to INR rate.',
+    sections: [
+      ['Why provider rates differ', 'The live rate is a reference rate, not a guaranteed transfer quote. Providers may apply a margin, flat fee, speed-based price or payment-method charge.'],
+      ['Make a fair comparison', 'Compare the final INR amount received for the same GBP amount, transfer speed and payment method.'],
+    ],
+  },
+  {
+    path: '/news/gbp-to-inr-live-rate-source-policy',
+    title: 'GBP to INR Live Rate Source and Data Policy',
+    description: 'Learn how PoundToINR sources its live GBP to INR rate, editorial market notes and real historical snapshots.',
+    eyebrow: 'Data policy',
+    intro: 'How live reference data and historical rate snapshots are handled on this site.',
+    sections: [
+      ['What the rate page shows', 'The homepage separates live reference data from editorial notes. The displayed rate is loaded from the exchange-rate feed.'],
+      ['Real history only', 'Historical chart points appear only after real snapshots are saved. Missing history is not backfilled with invented rates.'],
+    ],
+  },
+  {
+    path: '/news/how-gbp-to-inr-history-chart-fills',
+    title: 'How the GBP to INR History Chart Fills',
+    description: 'The GBP to INR history chart uses real saved snapshots instead of invented backfilled exchange rates.',
+    eyebrow: 'History data',
+    intro: 'Why the public history chart grows only from real saved rate snapshots.',
+    sections: [
+      ['How the chart fills', 'The chart is built from real snapshots saved by the site. A missing day remains missing instead of being filled with an invented rate.'],
+      ['Why this matters', 'The chart may grow slowly at first, but every displayed point remains traceable to stored rate data.'],
+    ],
+  },
+  {
+    path: '/news/gbp-to-inr-reference-rate-vs-provider-quote',
+    title: 'GBP to INR Reference Rate vs Provider Quote',
+    description: 'Understand why a GBP to INR reference rate is not the same as a guaranteed bank or money-transfer provider quote.',
+    eyebrow: 'Transfer costs',
+    intro: 'The difference between a public reference rate and the rate offered for a real transfer.',
+    sections: [
+      ['Reference rate, not a provider quote', 'The number on this site is a reference rate. A bank or transfer provider may quote differently because of margins, fees, speed or payment method.'],
+      ['Check the actual payout', 'For a real transfer decision, compare the final INR amount received after every fee and margin is included.'],
     ],
   },
 ];
@@ -271,7 +349,7 @@ for (const page of pages) {
 console.log(`SEO prerendered ${pages.length} routes.`);
 
 function writeRouteHtml(page) {
-  const canonicalUrl = `${siteUrl}${page.path}`;
+  const canonicalUrl = `${siteUrl}${canonicalPath(page.path)}`;
   const title = `${page.title} | ${siteName}`;
   const schema = buildSchema(page, canonicalUrl);
   const html = injectSeo(baseTemplate, {
@@ -305,7 +383,7 @@ function injectSeo(template, { body, canonicalUrl, description, image, schema, t
 }
 
 function renderBody(page, canonicalUrl) {
-  return [
+  return normalizeInternalLinks([
     '<main class="content-main seo-prerender">',
     '<article class="content-article">',
     `<p class="content-eyebrow">${escapeHtml(page.eyebrow)}</p>`,
@@ -325,7 +403,7 @@ function renderBody(page, canonicalUrl) {
     '</main>',
     renderFooter(),
     `<link rel="alternate" href="${canonicalUrl}" />`,
-  ].join('');
+  ].join(''));
 }
 
 function renderReverseConverter() {
@@ -372,8 +450,24 @@ function renderFooter() {
 
 function renderStaticSections(page) {
   return page.sections
-    .map(([heading, paragraph]) => `<section><h2>${escapeHtml(heading)}</h2><p>${escapeHtml(paragraph)}</p></section>`)
+    .map(([heading, paragraph]) => `<section><h2>${escapeHtml(heading)}</h2><p>${protectEmail(escapeHtml(paragraph))}</p></section>`)
     .join('');
+}
+
+function canonicalPath(routePath) {
+  if (routePath === '/') return '/';
+  return `${routePath.replace(/\/+$/, '')}/`;
+}
+
+function normalizeInternalLinks(html) {
+  return html.replace(/href="(\/(?!\/|#)[^"?#]*?)([?#][^"]*)?"/g, (_match, routePath, suffix = '') => {
+    if (routePath === '/' || /\.[a-z0-9]+$/i.test(routePath)) return `href="${routePath}${suffix}"`;
+    return `href="${canonicalPath(routePath)}${suffix}"`;
+  });
+}
+
+function protectEmail(html) {
+  return html.replaceAll(contactEmail, `<!--email_off--><a href="mailto:${contactEmail}">${contactEmail}</a><!--/email_off-->`);
 }
 
 function readArticleMarkdown(file) {

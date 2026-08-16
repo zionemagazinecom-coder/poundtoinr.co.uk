@@ -339,7 +339,7 @@ export function usePageSeo({
   title: string;
 }) {
   useEffect(() => {
-    const canonicalUrl = `${siteUrl}${path === '/' ? '' : path}`;
+    const canonicalUrl = `${siteUrl}${path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`}`;
     document.title = title;
     upsertMeta('description', description);
     upsertMeta('robots', noindex ? 'noindex,nofollow' : 'index,follow,max-image-preview:large');
@@ -387,11 +387,11 @@ export function SeoRoutePage({ page }: { page: SeoPage }) {
         </article>
         <aside className="content-aside" aria-label="Related pages">
           <h2>Useful pages</h2>
-          <a href="/gbp-to-inr">Pound to INR converter</a>
-          <a href="/guides">Transfer guides</a>
-          <a href="/news">Market notes</a>
-          <a href="/privacy-policy">Privacy policy</a>
-          <a href="/disclaimer">Disclaimer</a>
+          <a href="/gbp-to-inr/">Pound to INR converter</a>
+          <a href="/guides/">Transfer guides</a>
+          <a href="/news/">Market notes</a>
+          <a href="/privacy-policy/">Privacy policy</a>
+          <a href="/disclaimer/">Disclaimer</a>
         </aside>
       </main>
       <SiteFooter />
@@ -411,11 +411,11 @@ export function SiteHeader() {
           </strong>
         </a>
         <div className="nav-links">
-          <a href="/gbp-to-inr">Converter</a>
-          <a href="/guides">Guides</a>
-          <a href="/news">News</a>
-          <a href="/about">About</a>
-          <a href="/contact">Contact</a>
+          <a href="/gbp-to-inr/">Converter</a>
+          <a href="/guides/">Guides</a>
+          <a href="/news/">News</a>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
         </div>
         <a className="nav-cta" href="/#converter">
           Convert now
@@ -437,22 +437,22 @@ export function SiteFooter() {
       </div>
       <div>
         <h3>Convert</h3>
-        <a href="/gbp-to-inr">Pound to INR converter</a>
-        <a href="/guides">Currency & transfer guides</a>
-        <a href="/news">Exchange rate news</a>
+        <a href="/gbp-to-inr/">Pound to INR converter</a>
+        <a href="/guides/">Currency & transfer guides</a>
+        <a href="/news/">Exchange rate news</a>
       </div>
       <div>
         <h3>Company</h3>
-        <a href="/about">About us</a>
-        <a href="/contact">Contact</a>
-        <a href="/editorial-policy">Editorial policy</a>
+        <a href="/about/">About us</a>
+        <a href="/contact/">Contact</a>
+        <a href="/editorial-policy/">Editorial policy</a>
       </div>
       <div>
         <h3>Legal</h3>
-        <a href="/privacy-policy">Privacy policy</a>
-        <a href="/terms-and-conditions">Terms & conditions</a>
-        <a href="/disclaimer">Disclaimer</a>
-        <a href="/cookie-policy">Cookie policy</a>
+        <a href="/privacy-policy/">Privacy policy</a>
+        <a href="/terms-and-conditions/">Terms & conditions</a>
+        <a href="/disclaimer/">Disclaimer</a>
+        <a href="/cookie-policy/">Cookie policy</a>
       </div>
     </footer>
   );

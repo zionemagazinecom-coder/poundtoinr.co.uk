@@ -1,0 +1,74 @@
+[
+  {
+    "title": "How to compare GBP to INR transfer quotes",
+    "slug": "compare-gbp-to-inr-transfer-quotes",
+    "excerpt": "A practical checklist for comparing GBP to INR transfer quotes against the live reference-rate feed.",
+    "categories": ["Guides", "Money transfer"],
+    "featured_image_url": null,
+    "blocks": [
+      { "id": "compare-1", "type": "h2", "html": "Start with the live reference rate" },
+      { "id": "compare-2", "type": "paragraph", "html": "The rate on PoundToINR is pulled from the server-side exchange-rate feed. Use it as a reference point before comparing a bank, app or money-transfer quote." },
+      { "id": "compare-3", "type": "paragraph", "html": "A provider quote can be lower than the reference rate because the provider may include a margin inside the exchange rate as well as any visible fee. Compare the final INR amount for the same GBP amount, payment method and delivery speed." }
+    ]
+  },
+  {
+    "title": "NRI banking checklist before sending pounds to India",
+    "slug": "nri-banking-checklist-gbp-to-inr",
+    "excerpt": "A plain-English checklist for choosing and checking the receiving account before sending pounds to India.",
+    "categories": ["Guides", "NRI banking"],
+    "featured_image_url": null,
+    "blocks": [
+      { "id": "nri-1", "type": "h2", "html": "Use the right receiving account" },
+      { "id": "nri-2", "type": "paragraph", "html": "People sending money from the UK to India often need to check whether the receiving account is suitable for overseas income, local income or family support." },
+      { "id": "nri-3", "type": "paragraph", "html": "Before sending a large amount, confirm the account type, purpose code, documentation and repatriation rules with the receiving bank or a qualified adviser." }
+    ]
+  },
+  {
+    "title": "Why provider GBP to INR rates differ from the live rate",
+    "slug": "why-gbp-to-inr-provider-rates-differ",
+    "excerpt": "Why a bank or transfer app can quote a different GBP to INR rate than the live reference rate.",
+    "categories": ["Guides", "Exchange rates"],
+    "featured_image_url": null,
+    "blocks": [
+      { "id": "provider-1", "type": "h2", "html": "Why provider rates differ" },
+      { "id": "provider-2", "type": "paragraph", "html": "The live rate is a reference rate, not a guaranteed transfer quote. Banks and transfer companies may apply a margin, a flat fee, speed-based pricing or payment-method charges." },
+      { "id": "provider-3", "type": "paragraph", "html": "The best comparison is the final INR amount received for the same GBP amount, transfer speed and payment method." }
+    ]
+  },
+  {
+    "title": "GBP to INR live rate source and data policy",
+    "slug": "gbp-to-inr-live-rate-source-policy",
+    "excerpt": "How the GBP to INR rate, published posts and historical snapshots are sourced on this site.",
+    "categories": ["Market notes", "Exchange rates"],
+    "featured_image_url": null,
+    "blocks": [
+      { "id": "source-1", "type": "h2", "html": "What this rate page shows" },
+      { "id": "source-2", "type": "paragraph", "html": "PoundToINR separates live reference data from editorial notes. The homepage rate is pulled from the exchange-rate feed, while articles are published through the private CMS." },
+      { "id": "source-3", "type": "paragraph", "html": "Historical chart points are only shown after real snapshots are saved. The site does not backfill missing history with invented data." }
+    ]
+  },
+  {
+    "title": "How the GBP to INR history chart fills with real snapshots",
+    "slug": "how-gbp-to-inr-history-chart-fills",
+    "excerpt": "Why the history chart only grows from real saved GBP to INR snapshots.",
+    "categories": ["Market notes", "Exchange rates"],
+    "featured_image_url": null,
+    "blocks": [
+      { "id": "history-1", "type": "h2", "html": "How the history chart fills" },
+      { "id": "history-2", "type": "paragraph", "html": "The chart is built from real snapshots saved in Supabase. A missing day is left missing instead of being filled with an invented rate." },
+      { "id": "history-3", "type": "paragraph", "html": "This makes the chart slower to grow at the start, but it keeps the public page honest and easier to audit later." }
+    ]
+  },
+  {
+    "title": "GBP to INR reference rate vs provider quote",
+    "slug": "gbp-to-inr-reference-rate-vs-provider-quote",
+    "excerpt": "Why the live GBP to INR reference rate can differ from a bank or transfer provider quote.",
+    "categories": ["Market notes", "Money transfer"],
+    "featured_image_url": null,
+    "blocks": [
+      { "id": "reference-1", "type": "h2", "html": "Reference rate, not a provider quote" },
+      { "id": "reference-2", "type": "paragraph", "html": "The GBP to INR number on this site is a reference rate from the exchange-rate feed. A bank or transfer provider can quote a different rate because of margin, fees, speed or payment method." },
+      { "id": "reference-3", "type": "paragraph", "html": "For a real transfer decision, compare the final INR amount received after every fee and margin is included." }
+    ]
+  }
+]
