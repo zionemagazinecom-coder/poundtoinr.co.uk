@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/best-time-to-send-money-uk-to-india.md',
+    path: '/guides/best-time-to-send-money-from-uk-to-india',
+    title: 'Best Time to Send Money from UK to India',
+    description: 'Find the best time to send money from UK to India by comparing GBP/INR rates, provider margins, market events and transfer deadlines. Use this practical guide.',
+    eyebrow: 'Money transfer',
+    image: '/images/best-time-to-send-money-uk-to-india.webp',
+    updated: '2026-08-16',
+  },
+  {
+    file: 'content/posts/best-pound-to-inr-exchange-rate.md',
+    path: '/guides/best-pound-to-inr-exchange-rate',
+    title: 'How to Get the Best Pound to INR Exchange Rate',
+    description: 'Learn how to find the best pound to INR exchange rate by comparing live rates, provider margins, fees, payment methods and final payouts. Compare smarter today.',
+    eyebrow: 'Exchange-rate guide',
+    image: '/images/best-pound-to-inr-exchange-rate.webp',
+    updated: '2026-08-16',
+  },
+  {
     file: 'content/posts/pound-to-inr-today.md',
     path: '/news/pound-to-inr-today',
     title: 'Pound to INR Today: Live GBP/INR Rate and Daily Update',
@@ -521,7 +539,7 @@ function buildSchema(page, canonicalUrl) {
   return {
     '@context': 'https://schema.org',
     '@type': page.path.startsWith('/news/') || page.path.startsWith('/guides/') ? 'Article' : 'WebPage',
-    dateModified: page.path.includes('pound-to-inr-forecast') || page.path.includes('gbp-to-inr-forecast-this-week') ? '2026-08-15' : page.path.includes('pound-to-inr-historical-chart') || page.path.includes('gbp-inr-history') ? '2026-08-13' : page.path.includes('pound-to-rupee-calculator') || page.path.includes('gbp-to-inr-calculator') ? '2026-08-10' : page.path.includes('1-lakh-in-pounds') || page.path.includes('inr-to-gbp-converter') ? '2026-08-09' : page.path.includes('5000-pounds') || page.path.includes('10000-pounds') ? '2026-08-08' : '2026-08-02',
+    dateModified: page.updated ?? (page.path.includes('pound-to-inr-forecast') || page.path.includes('gbp-to-inr-forecast-this-week') ? '2026-08-15' : page.path.includes('pound-to-inr-historical-chart') || page.path.includes('gbp-inr-history') ? '2026-08-13' : page.path.includes('pound-to-rupee-calculator') || page.path.includes('gbp-to-inr-calculator') ? '2026-08-10' : page.path.includes('1-lakh-in-pounds') || page.path.includes('inr-to-gbp-converter') ? '2026-08-09' : page.path.includes('5000-pounds') || page.path.includes('10000-pounds') ? '2026-08-08' : '2026-08-02'),
     description: page.description,
     headline: page.title,
     ...(page.image ? { image: `${siteUrl}${page.image}` } : {}),
