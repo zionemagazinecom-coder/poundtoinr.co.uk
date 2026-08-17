@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/50-pounds-in-indian-rupees.md',
+    path: '/guides/50-pounds-in-indian-rupees',
+    title: '50 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 50 pounds in Indian rupees with the latest GBP/INR reference rate, clear calculations, fee examples and practical transfer guidance today.',
+    eyebrow: 'Exchange rates',
+    image: '/images/50-pounds-in-indian-rupees.webp',
+    updated: '2026-08-17',
+  },
+  {
+    file: 'content/posts/uk-to-india-money-transfer-fees.md',
+    path: '/guides/uk-to-india-money-transfer-fees',
+    title: 'UK to India Money Transfer Fees Explained',
+    description: 'Understand UK to India money transfer fees, exchange-rate margins, payment costs and final INR payouts before choosing a provider. Compare clearly.',
+    eyebrow: 'Money transfer',
+    image: '/images/uk-india-money-transfer-fees.webp',
+    updated: '2026-08-17',
+  },
+  {
     file: 'content/posts/best-time-to-send-money-uk-to-india.md',
     path: '/guides/best-time-to-send-money-from-uk-to-india',
     title: 'Best Time to Send Money from UK to India',
