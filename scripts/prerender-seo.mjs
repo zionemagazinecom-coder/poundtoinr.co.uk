@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/250-pounds-in-indian-rupees.md',
+    path: '/guides/250-pounds-in-indian-rupees',
+    title: '250 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 250 pounds in Indian rupees with the latest GBP/INR reference rate, clear calculations, fee examples and practical transfer guidance.',
+    eyebrow: 'Exchange rates',
+    image: '/images/250-pounds-in-indian-rupees.webp',
+    updated: '2026-08-18',
+  },
+  {
+    file: 'content/posts/send-money-to-nre-account-from-uk.md',
+    path: '/guides/send-money-to-nre-account-from-uk',
+    title: 'How to Send Money to an NRE Account from UK',
+    description: 'Learn how to send money to an NRE account from UK, check beneficiary details, compare GBP/INR costs and prepare documents for a smooth transfer.',
+    eyebrow: 'NRI banking',
+    image: '/images/send-money-to-nre-account-uk.webp',
+    updated: '2026-08-18',
+  },
+  {
     file: 'content/posts/50-pounds-in-indian-rupees.md',
     path: '/guides/50-pounds-in-indian-rupees',
     title: '50 Pounds in Indian Rupees: Live Conversion Guide',
