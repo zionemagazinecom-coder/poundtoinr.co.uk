@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/20-pounds-in-indian-rupees.md',
+    path: '/guides/20-pounds-in-indian-rupees',
+    title: '20 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 20 pounds in Indian rupees using the latest GBP/INR reference rate, with clear calculations, fee examples and practical exchange tips.',
+    eyebrow: 'Exchange rates',
+    image: '/images/20-pounds-in-indian-rupees.webp',
+    updated: '2026-08-19',
+  },
+  {
+    file: 'content/posts/nre-vs-nro-account-uk-residents.md',
+    path: '/guides/nre-vs-nro-account-uk-residents',
+    title: 'NRE vs NRO Account for UK Residents: Key Differences',
+    description: 'Compare NRE vs NRO accounts for UK residents, including permitted funds, repatriation, tax considerations and choosing the right Indian account.',
+    eyebrow: 'NRI banking',
+    image: '/images/nre-vs-nro-account-uk-residents.webp',
+    updated: '2026-08-19',
+  },
+  {
     file: 'content/posts/250-pounds-in-indian-rupees.md',
     path: '/guides/250-pounds-in-indian-rupees',
     title: '250 Pounds in Indian Rupees: Live Conversion Guide',
