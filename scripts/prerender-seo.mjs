@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/10-pounds-in-indian-rupees.md',
+    path: '/guides/10-pounds-in-indian-rupees',
+    title: '10 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 10 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates',
+    image: '/images/10-pounds-in-indian-rupees.webp',
+    updated: '2026-08-21',
+  },
+  {
+    file: 'content/posts/bank-transfer-from-uk-to-india.md',
+    path: '/guides/bank-transfer-from-uk-to-india',
+    title: 'Bank Transfer from UK to India: Rates, Fees and Steps',
+    description: 'Plan a bank transfer from UK to India with clear steps for comparing GBP/INR rates, fees, delivery routes, recipient details and provider safety.',
+    eyebrow: 'Money transfer',
+    image: '/images/bank-transfer-from-uk-to-india.webp',
+    updated: '2026-08-21',
+  },
+  {
     file: 'content/posts/20-pounds-in-indian-rupees.md',
     path: '/guides/20-pounds-in-indian-rupees',
     title: '20 Pounds in Indian Rupees: Live Conversion Guide',

@@ -53,6 +53,7 @@ type BundledPostRow = {
 };
 
 const bundledPostFeeds = [
+  { publishedAt: '2026-08-21T00:00:00.000Z', url: '/content/daily-posts-2026-08-21.json' },
   { publishedAt: '2026-08-19T00:00:00.000Z', url: '/content/daily-posts-2026-08-19.json' },
   { publishedAt: '2026-08-18T00:00:00.000Z', url: '/content/daily-posts-2026-08-18.json' },
   { publishedAt: '2026-08-17T00:00:00.000Z', url: '/content/daily-posts-2026-08-17.json' },
