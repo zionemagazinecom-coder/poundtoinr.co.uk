@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/25-pounds-in-indian-rupees.md',
+    path: '/guides/25-pounds-in-indian-rupees',
+    title: '25 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 25 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates',
+    image: '/images/25-pounds-in-indian-rupees.webp',
+    updated: '2026-08-23',
+  },
+  {
+    file: 'content/posts/uk-to-india-money-transfer-time.md',
+    path: '/guides/uk-to-india-money-transfer-time',
+    title: 'How Long Does a UK to India Money Transfer Take?',
+    description: 'Understand UK to India money transfer time, including typical delivery stages, bank cut-offs, weekends, verification delays and tracking steps.',
+    eyebrow: 'Money transfer',
+    image: '/images/uk-to-india-money-transfer-time.webp',
+    updated: '2026-08-23',
+  },
+  {
     file: 'content/posts/10-pounds-in-indian-rupees.md',
     path: '/guides/10-pounds-in-indian-rupees',
     title: '10 Pounds in Indian Rupees: Live Conversion Guide',
