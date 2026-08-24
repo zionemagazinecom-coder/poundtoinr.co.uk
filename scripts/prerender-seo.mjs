@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/30-pounds-in-indian-rupees.md',
+    path: '/guides/30-pounds-in-indian-rupees',
+    title: '30 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 30 pounds in Indian rupees with the latest GBP/INR reference rate, a clear calculation, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates',
+    image: '/images/30-pounds-in-indian-rupees.webp',
+    updated: '2026-08-24',
+  },
+  {
+    file: 'content/posts/swift-transfer-from-uk-to-india.md',
+    path: '/guides/swift-transfer-from-uk-to-india',
+    title: 'SWIFT Transfer from UK to India: Fees, Time and Steps',
+    description: 'Understand a SWIFT transfer from UK to India, including bank details, correspondent routes, exchange rates, fees, timing, tracking and safety checks.',
+    eyebrow: 'Money transfer',
+    image: '/images/swift-transfer-from-uk-to-india.webp',
+    updated: '2026-08-24',
+  },
+  {
     file: 'content/posts/25-pounds-in-indian-rupees.md',
     path: '/guides/25-pounds-in-indian-rupees',
     title: '25 Pounds in Indian Rupees: Live Conversion Guide',
