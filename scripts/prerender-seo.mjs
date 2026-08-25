@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/40-pounds-in-indian-rupees.md',
+    path: '/guides/40-pounds-in-indian-rupees',
+    title: '40 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 40 pounds in Indian rupees today with the latest GBP/INR reference rate, a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates',
+    image: '/images/40-pounds-in-indian-rupees.webp',
+    updated: '2026-08-25',
+  },
+  {
+    file: 'content/posts/cheapest-way-to-send-money-uk-to-india.md',
+    path: '/guides/cheapest-way-to-send-money-uk-to-india',
+    title: 'Cheapest Way to Send Money from UK to India',
+    description: 'Find the cheapest way to send money from UK to India by comparing exchange-rate margins, fees, payment methods, speed and final rupees received.',
+    eyebrow: 'Money transfer',
+    image: '/images/cheapest-way-to-send-money-uk-to-india.webp',
+    updated: '2026-08-25',
+  },
+  {
     file: 'content/posts/30-pounds-in-indian-rupees.md',
     path: '/guides/30-pounds-in-indian-rupees',
     title: '30 Pounds in Indian Rupees: Live Conversion Guide',
