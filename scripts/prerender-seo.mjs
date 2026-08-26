@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/pay-in-pounds-or-rupees-in-india.md',
+    path: '/guides/pay-in-pounds-or-rupees-in-india',
+    title: 'Pay in Pounds or Rupees in India? Card Payment Guide',
+    description: 'Should you pay in pounds or rupees in India? Compare card conversion, ATM charges and worked examples so you can check the real cost before paying.',
+    eyebrow: 'Travel money',
+    image: '/images/pay-in-pounds-or-rupees-in-india.webp',
+    updated: '2026-08-26',
+  },
+  {
+    file: 'content/posts/documents-to-send-money-uk-to-india.md',
+    path: '/guides/documents-to-send-money-uk-to-india',
+    title: 'Documents Needed to Send Money from UK to India',
+    description: 'Check the documents needed to send money from UK to India, including identity, address, source of funds and recipient details. Prepare safely.',
+    eyebrow: 'Money transfer',
+    image: '/images/documents-to-send-money-uk-to-india.webp',
+    updated: '2026-08-26',
+  },
+  {
     file: 'content/posts/40-pounds-in-indian-rupees.md',
     path: '/guides/40-pounds-in-indian-rupees',
     title: '40 Pounds in Indian Rupees: Live Conversion Guide',
