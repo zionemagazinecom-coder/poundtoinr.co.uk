@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/how-much-money-can-you-send-uk-to-india.md',
+    path: '/guides/how-much-money-can-you-send-uk-to-india',
+    title: 'How Much Money Can You Send from UK to India?',
+    description: 'Learn how much money you can send from UK to India, why limits vary by transfer route, and which checks, documents and recipient details may apply.',
+    eyebrow: 'Money transfer',
+    image: '/images/how-much-money-can-you-send-uk-to-india.webp',
+    updated: '2026-08-28',
+  },
+  {
+    file: 'content/posts/is-money-sent-from-uk-to-india-taxable.md',
+    path: '/guides/is-money-sent-from-uk-to-india-taxable',
+    title: 'Is Money Sent from UK to India Taxable?',
+    description: 'Is money sent from UK to India taxable? Learn how gifts, family support, own-account transfers and income can be treated, and which records to keep.',
+    eyebrow: 'Tax guide',
+    image: '/images/is-money-sent-from-uk-to-india-taxable.webp',
+    updated: '2026-08-28',
+  },
+  {
     file: 'content/posts/pay-in-pounds-or-rupees-in-india.md',
     path: '/guides/pay-in-pounds-or-rupees-in-india',
     title: 'Pay in Pounds or Rupees in India? Card Payment Guide',

@@ -407,7 +407,7 @@ function PostRoutePage({ path }: { path: string }) {
               <h1>{post.title}</h1>
               <p className="content-intro">{post.excerpt}</p>
               <p className="content-updated">Last updated: {formatDate(post.publishedAt ?? post.createdAt)}</p>
-              {post.featuredImageUrl ? <img className="post-featured-image" src={post.featuredImageUrl} alt="" /> : null}
+              {post.featuredImageUrl ? <img className="post-featured-image" src={post.featuredImageUrl} alt={`${post.title} featured image`} /> : null}
               {isForwardCalculatorPost(slug) ? <Converter /> : null}
               {isReverseConverterPost(slug) ? <ReverseConverter /> : null}
               {(post.blocks ?? []).map((block) => renderPostBlock(block))}
