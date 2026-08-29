@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/60-pounds-in-indian-rupees.md',
+    path: '/guides/60-pounds-in-indian-rupees',
+    title: '60 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 60 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates',
+    image: '/images/60-pounds-in-indian-rupees.webp',
+    updated: '2026-08-29',
+  },
+  {
+    file: 'content/posts/send-money-uk-to-india-debit-card.md',
+    path: '/guides/send-money-uk-to-india-debit-card',
+    title: 'Send Money from UK to India with a Debit Card',
+    description: 'Learn how to send money from UK to India with a debit card, compare fees, complete card checks, avoid common declines and verify the INR payout.',
+    eyebrow: 'Money transfer',
+    image: '/images/send-money-uk-to-india-debit-card.webp',
+    updated: '2026-08-29',
+  },
+  {
     file: 'content/posts/how-much-money-can-you-send-uk-to-india.md',
     path: '/guides/how-much-money-can-you-send-uk-to-india',
     title: 'How Much Money Can You Send from UK to India?',
