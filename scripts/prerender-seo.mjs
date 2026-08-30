@@ -193,6 +193,24 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/70-pounds-in-indian-rupees.md',
+    path: '/guides/70-pounds-in-indian-rupees',
+    title: '70 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 70 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates',
+    image: '/images/70-pounds-in-indian-rupees.webp',
+    updated: '2026-08-30',
+  },
+  {
+    file: 'content/posts/gbp-to-inr-weekend-rate.md',
+    path: '/guides/gbp-to-inr-weekend-rate',
+    title: 'GBP to INR Weekend Rate: What Changes and Why',
+    description: 'Understand the GBP to INR weekend rate, why feeds and provider quotes can differ, when markets reopen, and how to compare fees before exchanging.',
+    eyebrow: 'Exchange rates',
+    image: '/images/gbp-to-inr-weekend-rate.webp',
+    updated: '2026-08-30',
+  },
+  {
     file: 'content/posts/60-pounds-in-indian-rupees.md',
     path: '/guides/60-pounds-in-indian-rupees',
     title: '60 Pounds in Indian Rupees: Live Conversion Guide',
