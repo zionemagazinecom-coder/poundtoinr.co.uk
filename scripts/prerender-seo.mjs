@@ -193,6 +193,42 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/150-pounds-in-indian-rupees.md', path: '/guides/150-pounds-in-indian-rupees',
+    title: '150 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 150 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/150-pounds-in-indian-rupees.webp', updated: '2026-09-02',
+  },
+  {
+    file: 'content/posts/track-money-transfer-uk-to-india.md', path: '/guides/track-money-transfer-uk-to-india',
+    title: 'How to Track a Money Transfer from UK to India',
+    description: 'Learn how to track a money transfer UK to India, understand each status, find reference numbers and respond safely when a payment is delayed.',
+    eyebrow: 'Money transfer', image: '/images/track-money-transfer-uk-to-india.webp', updated: '2026-09-02',
+  },
+  {
+    file: 'content/posts/90-pounds-in-indian-rupees.md', path: '/guides/90-pounds-in-indian-rupees',
+    title: '90 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 90 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/90-pounds-in-indian-rupees.webp', updated: '2026-09-01',
+  },
+  {
+    file: 'content/posts/gbp-to-inr-exchange-rate-margin.md', path: '/guides/gbp-to-inr-exchange-rate-margin',
+    title: 'GBP to INR Exchange Rate Margin Explained',
+    description: 'Learn how a GBP to INR exchange rate margin changes your rupee payout, how to calculate it, compare quotes and identify the true transfer cost.',
+    eyebrow: 'Exchange rates', image: '/images/gbp-to-inr-exchange-rate-margin.webp', updated: '2026-09-01',
+  },
+  {
+    file: 'content/posts/80-pounds-in-indian-rupees.md', path: '/guides/80-pounds-in-indian-rupees',
+    title: '80 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 80 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/80-pounds-in-indian-rupees.webp', updated: '2026-08-31',
+  },
+  {
+    file: 'content/posts/bank-transfer-vs-debit-card-uk-to-india.md', path: '/guides/bank-transfer-vs-debit-card-uk-to-india',
+    title: 'Bank Transfer vs Debit Card for UK to India Transfers',
+    description: 'Compare bank transfer vs debit card UK to India payments, including fees, speed, limits, security checks and the final INR amount safely received.',
+    eyebrow: 'Money transfer', image: '/images/bank-transfer-vs-debit-card-uk-to-india.webp', updated: '2026-08-31',
+  },
+  {
     file: 'content/posts/70-pounds-in-indian-rupees.md',
     path: '/guides/70-pounds-in-indian-rupees',
     title: '70 Pounds in Indian Rupees: Live Conversion Guide',
