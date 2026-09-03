@@ -193,6 +193,18 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/200-pounds-in-indian-rupees.md', path: '/guides/200-pounds-in-indian-rupees',
+    title: '200 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 200 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/200-pounds-in-indian-rupees.webp', updated: '2026-09-03',
+  },
+  {
+    file: 'content/posts/send-money-from-uk-to-india-online.md', path: '/guides/send-money-from-uk-to-india-online',
+    title: 'Send Money from UK to India Online: A Practical Guide',
+    description: 'Learn how to send money from UK to India online, compare rates and fees, verify recipient details, choose funding and track the INR payment safely.',
+    eyebrow: 'Money transfer', image: '/images/send-money-from-uk-to-india-online.webp', updated: '2026-09-03',
+  },
+  {
     file: 'content/posts/150-pounds-in-indian-rupees.md', path: '/guides/150-pounds-in-indian-rupees',
     title: '150 Pounds in Indian Rupees: Live Conversion Guide',
     description: 'Convert 150 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',

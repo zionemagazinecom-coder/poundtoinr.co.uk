@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://poundtoinr.co.uk/</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://poundtoinr.co.uk/guides/</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -30,6 +30,8 @@
     <changefreq>daily</changefreq>
     <priority>0.84</priority>
   </url>
+  <url><loc>https://poundtoinr.co.uk/guides/200-pounds-in-indian-rupees/</loc><lastmod>2026-09-03</lastmod><changefreq>daily</changefreq><priority>0.84</priority></url>
+  <url><loc>https://poundtoinr.co.uk/guides/send-money-from-uk-to-india-online/</loc><lastmod>2026-09-03</lastmod><changefreq>monthly</changefreq><priority>0.88</priority></url>
   <url>
     <loc>https://poundtoinr.co.uk/guides/gbp-to-inr-weekend-rate/</loc>
     <lastmod>2026-08-30</lastmod>
