@@ -193,6 +193,54 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/800-pounds-in-indian-rupees.md', path: '/guides/800-pounds-in-indian-rupees',
+    title: '800 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 800 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/800-pounds-in-indian-rupees.webp', updated: '2026-09-07',
+  },
+  {
+    file: 'content/posts/1500-pounds-in-indian-rupees.md', path: '/guides/1500-pounds-in-indian-rupees',
+    title: '1500 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 1500 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/1500-pounds-in-indian-rupees.webp', updated: '2026-09-07',
+  },
+  {
+    file: 'content/posts/750-pounds-in-indian-rupees.md', path: '/guides/750-pounds-in-indian-rupees',
+    title: '750 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 750 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/750-pounds-in-indian-rupees.webp', updated: '2026-09-06',
+  },
+  {
+    file: 'content/posts/firc-for-money-transfer-to-india.md', path: '/guides/firc-for-money-transfer-to-india',
+    title: 'FIRC for Money Transfers to India: What to Know',
+    description: 'Learn what an FIRC for money transfer to India proves, when recipients may need one, who issues it and which payment records to keep safely.',
+    eyebrow: 'Money transfer', image: '/images/firc-for-money-transfer-to-india.webp', updated: '2026-09-06',
+  },
+  {
+    file: 'content/posts/400-pounds-in-indian-rupees.md', path: '/guides/400-pounds-in-indian-rupees',
+    title: '400 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 400 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/400-pounds-in-indian-rupees.webp', updated: '2026-09-05',
+  },
+  {
+    file: 'content/posts/600-pounds-in-indian-rupees.md', path: '/guides/600-pounds-in-indian-rupees',
+    title: '600 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 600 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/600-pounds-in-indian-rupees.webp', updated: '2026-09-05',
+  },
+  {
+    file: 'content/posts/300-pounds-in-indian-rupees.md', path: '/guides/300-pounds-in-indian-rupees',
+    title: '300 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 300 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/300-pounds-in-indian-rupees.webp', updated: '2026-09-04',
+  },
+  {
+    file: 'content/posts/ifsc-code-uk-to-india-transfer.md', path: '/guides/ifsc-code-uk-to-india-transfer',
+    title: 'IFSC Code for UK to India Money Transfers',
+    description: 'Learn how an IFSC code works for UK to India transfers, where to find it, how to verify all 11 characters and avoid recipient-detail delays.',
+    eyebrow: 'Money transfer', image: '/images/ifsc-code-uk-to-india-transfer.webp', updated: '2026-09-04',
+  },
+  {
     file: 'content/posts/200-pounds-in-indian-rupees.md', path: '/guides/200-pounds-in-indian-rupees',
     title: '200 Pounds in Indian Rupees: Live Conversion Guide',
     description: 'Convert 200 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
