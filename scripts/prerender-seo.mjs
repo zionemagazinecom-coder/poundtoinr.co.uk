@@ -193,6 +193,18 @@ const staticPages = [
 
 const postFiles = [
   {
+    file: 'content/posts/2500-pounds-in-indian-rupees.md', path: '/guides/2500-pounds-in-indian-rupees',
+    title: '2500 Pounds in Indian Rupees: Live Conversion Guide',
+    description: 'Convert 2500 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
+    eyebrow: 'Exchange rates', image: '/images/2500-pounds-in-indian-rupees.webp', updated: '2026-09-08',
+  },
+  {
+    file: 'content/posts/purpose-code-uk-to-india-money-transfer.md', path: '/guides/purpose-code-uk-to-india-money-transfer',
+    title: 'Purpose Code for UK to India Money Transfers',
+    description: 'Learn how to choose a purpose code for UK to India money transfers, match it to the real payment reason and avoid preventable delays or rejection.',
+    eyebrow: 'Money transfer', image: '/images/purpose-code-uk-to-india-money-transfer.webp', updated: '2026-09-08',
+  },
+  {
     file: 'content/posts/800-pounds-in-indian-rupees.md', path: '/guides/800-pounds-in-indian-rupees',
     title: '800 Pounds in Indian Rupees: Live Conversion Guide',
     description: 'Convert 800 pounds in Indian rupees using the latest GBP/INR reference rate, with a clear formula, fee examples and practical exchange guidance.',
